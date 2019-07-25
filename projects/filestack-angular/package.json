@@ -1,0 +1,9 @@
+{
+  "name": "@filestack/angular",
+  "version": "0.1.0",
+  "peerDependencies": {
+    "@angular/common": "^8.0.1",
+    "@angular/core": "^8.0.1",
+    "filestack-js": "3.x.x"
+  }
+}
