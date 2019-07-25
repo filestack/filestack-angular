@@ -2,7 +2,7 @@
   filestack-angular
 </h1>
 <p align="center">
-  Angular component librabry which allow you to easily integrate powerful filestack-api into your app.
+  Angular component library which allow you to easily integrate powerful filestack-api into your app.
 </p>
 
 **Table of Contents**
