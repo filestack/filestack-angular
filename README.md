@@ -37,6 +37,7 @@ which can be also used independently if needed
 ### Installation
 Install it through NPM
 ```bash
+npm install filestack-js
 npm install @filestack/angular
 ```
 Include ```FilestackModule``` in ```app.module.ts```
