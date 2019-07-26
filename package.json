@@ -1,6 +1,6 @@
 {
   "name": "filestack",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Angular module for filestack-js",
   "scripts": {
     "ng": "ng",
@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "release": "ng test filestack-angular --watch=false && ng build filestack-angular && standard-version",
-    "publishS3": "npx webpack"
+    "publishS3": "npx webpack",
+    "publish": "cd dist/filestack-angular/ && npm publish"
   },
   "dependencies": {
     "@angular/common": "~8.0.0",
@@ -48,7 +49,6 @@
     "tslint": "~5.15.0",
     "typescript": "~3.4.3",
     "webpack": "^4.37.0",
-    "webpack-assets-manifest": "^3.1.1",
     "webpack-cli": "^3.3.6",
     "webpack-s3-plugin": "^1.0.3"
   },
