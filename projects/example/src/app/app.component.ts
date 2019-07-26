@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   constructor(private filestackService: FilestackService) {}
 
   ngOnInit() {
-      this.apikey = 'A0NTRSxHcR66kmTku9Gcsz';
+      this.apikey = '';
       this.clientOptions = {
         sessionCache: false
       };
