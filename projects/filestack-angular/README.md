@@ -65,11 +65,11 @@ Use in .html file
 </ng-picker-overlay>
 ```
 ### CDN
-The compiled filestack angular module is also available through our cdn
+In the case you would like to import `filestack-module` bundle file directly to your app
+instead of using npm package you can find it on our cdn:
 ```
 https://static.filestackapi.com/filestack-angular/{MODULE_VERSION}/filestack-angular.umd.min.js
 ```
-and map file to module
 ```
 https://static.filestackapi.com/filestack-angular/{MODULE_VERSION}/filestack-angular.umd.min.js.map
 ```
