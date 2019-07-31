@@ -1,9 +1,22 @@
+<p align="center"><img src="logo.svg" align="center" width="80"/></p>
 <h1 align="center">
   filestack-angular
 </h1>
 <p align="center">
   Angular component library which allow you to easily integrate powerful filestack-api into your app.
 </p>
+<p align="center">
+  <a href="https://travis-ci.org/filestack/filestack-angular">
+    <img src="https://travis-ci.org/filestack/filestack-angular.svg?branch=master" />
+  </a>
+  <a href="https://www.npmjs.com/package/@filestack/angular">
+    <img src="https://img.shields.io/npm/v/@filestack/angular.svg" />
+  </a>
+  <img src="https://img.shields.io/bundlephobia/min/@filestack/angular.svg" />
+  <br>
+  <img src="https://badges.herokuapp.com/browsers?labels=none&googlechrome=latest&firefox=latest&microsoftedge=latest&iexplore=11&safari=latest&iphone=latest" />
+</p>
+<hr>
 
 **Table of Contents**
 - [Overview](#overview)
@@ -19,7 +32,7 @@
 - [Contributing](#contributing)
 
 ## Overview
-filestack-angular is a kind of wrapper on [filestack-js](https://github.com/filestack/filestack-js) sdk which allow you to integrate with filestack service in just a few lines of code. Almost all you are able to do with [filestack-js](https://filestack.github.io/filestack-js/index.html) you can also do using this component.
+filestack-angular is a wrapper on [filestack-js](https://github.com/filestack/filestack-js) sdk which allow you to integrate with Filestack service in just a few lines of code. Almost all you are able to do with [filestack-js](https://filestack.github.io/filestack-js/index.html) you can also do using this component.
 
 This repository a contains angular workspace with two projects:
 - `filestack-angular` library which contains `FilestackAngularModule` published via npm
