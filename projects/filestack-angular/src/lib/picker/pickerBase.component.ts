@@ -34,14 +34,12 @@ export abstract class PickerBaseComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const {apikey, clientOptions, filestackService} = this;
-    filestackService.init(apikey, clientOptions);
+    this.filestackService.init(this.apikey, this.clientOptions);
   }
 
   ngOnDestroy() {
-    const {picker} = this;
-    if (picker) {
-      picker.close();
+    if (this.picker) {
+      this.picker.close();
     }
   }
 }

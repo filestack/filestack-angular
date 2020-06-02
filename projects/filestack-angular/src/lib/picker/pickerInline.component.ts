@@ -12,19 +12,18 @@ import { PickerDisplayMode } from 'filestack-js';
 })
 export class PickerInlineComponent extends PickerBaseComponent implements AfterContentInit {
     ngAfterContentInit() {
-      const { filestackService, uploadSuccess, uploadError, pickerOptions } = this;
 
       // Overwrite display mode to be always 'inline' in this component
-      this.picker = filestackService.picker({
-        ...pickerOptions,
+      this.picker = this.filestackService.picker({
+        ...this.pickerOptions,
         displayMode: PickerDisplayMode.inline,
         container: 'ng-picker-inline-container',
-        onUploadDone: res => uploadSuccess.next(res)
+        onUploadDone: res => this.uploadSuccess.next(res)
       });
 
       // Picker open success handler there is ommited, because it's accessible from pickerOptions
       this.picker.open()
         .then(void(0))
-        .catch(err => uploadError.next(err));
+        .catch(err => this.uploadError.next(err));
     }
 }

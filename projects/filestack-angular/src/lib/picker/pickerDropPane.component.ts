@@ -12,19 +12,17 @@ import { PickerDisplayMode } from 'filestack-js';
 })
 export class PickerDropPaneComponent extends PickerBaseComponent implements AfterContentInit {
     ngAfterContentInit() {
-      const { filestackService, uploadSuccess, uploadError, pickerOptions } = this;
-
       // Overwrite display mode to be always 'dropPane' in this component
-      this.picker = filestackService.picker({
-        ...pickerOptions,
+      this.picker = this.filestackService.picker({
+        ...this.pickerOptions,
         displayMode: PickerDisplayMode.dropPane,
         container: 'ng-picker-drop-pane-container',
-        onUploadDone: res => uploadSuccess.next(res)
+        onUploadDone: res => this.uploadSuccess.next(res)
       });
 
       // Picker open success handler there is ommited, because it's accessible from pickerOptions
       this.picker.open()
         .then(void(0))
-        .catch(err => uploadError.next(err));
+        .catch(err => this.uploadError.next(err));
     }
 }
