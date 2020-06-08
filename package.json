@@ -1,6 +1,6 @@
 {
   "name": "filestack",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Angular module for filestack-js",
   "scripts": {
     "ng": "ng",
@@ -10,9 +10,9 @@
     "test:watch": "ng test filestack-angular",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "release": "ng test filestack-angular --watch=false && ng build filestack-angular && standard-version",
+    "release": "ng test filestack-angular --watch=false && ng build filestack-angular --prod=true && standard-version",
     "publishS3": "npx webpack",
-    "publish": "cd dist/filestack-angular/ && npm publish && npm publishS3"
+    "publish": "cd dist/filestack-angular/ && npm publish && cd ../../ && npm run publishS3"
   },
   "dependencies": {
     "@angular/animations": "~9.1.9",

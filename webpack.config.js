@@ -1,6 +1,6 @@
 const S3Plugin = require('webpack-s3-plugin');
 const path = require('path');
-const version = require('../package.json').version;
+const version = require('./projects/filestack-angular/package.json').version;
 
 var config = {
   mode: 'production',
