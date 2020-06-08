@@ -1,13 +1,10 @@
-import {
-    Component,
-    ChangeDetectionStrategy,
-    AfterContentInit
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, AfterContentInit } from '@angular/core';
 import { PickerBaseComponent } from './pickerBase.component';
 import { PickerDisplayMode } from 'filestack-js';
+
 @Component({
     selector: 'ng-picker-drop-pane',
-    template: '<div id="ng-picker-drop-pane-container" class="ng-picker"></div>',
+    template: '<div [id]="elementId" class="ng-picker"></div>',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PickerDropPaneComponent extends PickerBaseComponent implements AfterContentInit {
@@ -15,8 +12,9 @@ export class PickerDropPaneComponent extends PickerBaseComponent implements Afte
       // Overwrite display mode to be always 'dropPane' in this component
       this.picker = this.filestackService.picker({
         ...this.pickerOptions,
+        rootId: `picker-overlay-${Date.now()}`,
         displayMode: PickerDisplayMode.dropPane,
-        container: 'ng-picker-drop-pane-container',
+        container: this.elementId,
         onUploadDone: res => this.uploadSuccess.next(res)
       });
 

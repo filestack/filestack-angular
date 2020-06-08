@@ -25,8 +25,14 @@
   - [CDN](#cdn)
   - [Available inputs](#available-inputs)
   - [Available outputs](#available-outputs)
-  - [FilestackService](#FilestackService)
+  - [FilestackService](#filestackservice)
   - [Examples](#examples)
+    - [Open picker directly after component initialization](#open-picker-directly-after-component-initialization)
+    - [Open picker by clicking the custom button](#open-picker-by-clicking-the-custom-button)
+    - [Open picker in inline mode](#open-picker-in-inline-mode)
+    - [Open picker in drop pane mode](#open-picker-in-drop-pane-mode)
+    - [Get transformed url using filestackTransform pipe](#get-transformed-url-using-filestacktransform-pipe)
+    - [Select file and upload using sdk client.upload()](#select-file-and-upload-using-sdk-clientupload)
 - [Documentation](#documentation)
 - [Development](#development)
 - [Contributing](#contributing)
@@ -59,13 +65,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { FilestackModule } from '@filestack/angular';
+import { FilestackModule } from '@filestack/angular';
+
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
     BrowserModule,
-    FilestackModule
+    FilestackModule.forRoot({ apikey: YOUR_APIKEY, options: ClientConfig })
   ],
   bootstrap: [AppComponent]
 })
