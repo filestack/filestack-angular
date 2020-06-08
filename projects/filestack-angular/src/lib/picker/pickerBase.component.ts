@@ -1,10 +1,4 @@
-import {
-  Input,
-  Output,
-  OnInit,
-  Inject,
-  OnDestroy
-} from '@angular/core';
+import { Input, Output, OnInit, Inject, OnDestroy, Directive } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FilestackService } from '../filestack.service';
 import {
@@ -16,7 +10,11 @@ import {
   FilestackError
 } from 'filestack-js';
 
+@Directive()
 export abstract class PickerBaseComponent implements OnInit, OnDestroy {
+
+  public elementId = 'picker-container';
+
   @Input() apikey: string;
   @Input() pickerOptions: PickerOptions;
   @Input() clientOptions: ClientOptions;
@@ -31,17 +29,21 @@ export abstract class PickerBaseComponent implements OnInit, OnDestroy {
   constructor(@Inject(FilestackService) protected filestackService: FilestackService) {
     this.uploadSuccess = new Subject();
     this.uploadError = new Subject();
+
+    this.generateId();
   }
 
   ngOnInit() {
-    const {apikey, clientOptions, filestackService} = this;
-    filestackService.init(apikey, clientOptions);
+    this.filestackService.init(this.apikey, this.clientOptions);
+  }
+
+  generateId() {
+    this.elementId = `picker-container-${Date.now()}`;
   }
 
   ngOnDestroy() {
-    const {picker} = this;
-    if (picker) {
-      picker.close();
+    if (this.picker) {
+      this.picker.close();
     }
   }
 }

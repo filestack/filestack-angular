@@ -1,21 +1,14 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import { FilestackService } from './../../../../dist/filestack-angular';
-import {
-  InputFile,
-  TransformOptions,
-  PickerOptions
-} from 'filestack-js';
+import { Component,  OnInit} from '@angular/core';
+import { FilestackService } from './../../../filestack-angular/src/public-api';
+import { InputFile, TransformOptions, PickerOptions } from 'filestack-js';
+import { Code } from './examples';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  apikey: string;
   action: string;
   clientOptions: object;
   file: InputFile;
@@ -25,13 +18,11 @@ export class AppComponent implements OnInit {
   isInline = false;
   isDropPane = false;
 
+  exampleCodes = Code;
+
   constructor(private filestackService: FilestackService) {}
 
   ngOnInit() {
-      this.apikey = '';
-      this.clientOptions = {
-        sessionCache: false
-      };
       this.pickerOptions = {
         onOpen: () => {
           console.log('### Open picker event');
@@ -40,6 +31,7 @@ export class AppComponent implements OnInit {
           console.log('### File upload progress', res);
         }
       };
+
       this.transformOptions = {
         resize: {
           width: 400

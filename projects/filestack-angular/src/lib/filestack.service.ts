@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
-import {
-  from,
-  Observable
-} from 'rxjs';
+import { InitialConfig } from './filestack.module';
+import { Injectable, Inject, Optional } from '@angular/core';
+import { from, Observable } from 'rxjs';
 import {
   PickerOptions,
   PickerInstance,
@@ -17,20 +15,33 @@ import {
   PreviewOptions,
   ClientOptions,
   Client,
-  init
- } from 'filestack-js';
+  init,
+} from 'filestack-js';
 
-@Injectable({
-  providedIn: 'root'
-})
 
+@Injectable()
 export class FilestackService {
+
   private clientInstance: Client;
+
+  private clientOptions: ClientOptions;
+
+  private apikey: string;
+
+  constructor(@Optional() @Inject('config') private config?: InitialConfig) {
+    if (!config) {
+      return;
+    }
+
+    this.clientOptions = config.options;
+    this.apikey = config.apikey;
+  }
 
   private get client(): Client {
     if (!this.clientInstance) {
-      throw new Error('FilestackService: client does not exist. Please initialize service via init method.');
+      return this.init();
     }
+
     return this.clientInstance;
   }
 
@@ -53,8 +64,10 @@ export class FilestackService {
    * @param apikey - Filestack apikey
    * @param clientOptions - Client options
    */
-  init(apikey: string, clientOptions?: ClientOptions): void {
-    this.client = init(apikey, clientOptions);
+  init(apikey?: string, clientOptions?: ClientOptions): Client {
+    this.client = init(apikey || this.apikey, clientOptions || this.clientOptions);
+
+    return this.client;
   }
 
   /**
@@ -71,7 +84,11 @@ export class FilestackService {
    * @param options - Transformation options
    * @param b64 - Encode url params in base64
    */
-  transform(url: string | string[], options: TransformOptions, b64?: boolean): string {
+  transform(
+    url: string | string[],
+    options: TransformOptions,
+    b64?: boolean
+  ): string {
     return this.client.transform(url, options, b64);
   }
 
@@ -81,7 +98,11 @@ export class FilestackService {
    * @param options - Retrieve options
    * @param security - Filestack security object
    */
-  retrieve(handle: string, options?: RetrieveOptions, security?: Security): Observable<object | Blob> {
+  retrieve(
+    handle: string,
+    options?: RetrieveOptions,
+    security?: Security
+  ): Observable<object | Blob> {
     return from(this.client.retrieve(handle, options, security));
   }
 
@@ -91,7 +112,11 @@ export class FilestackService {
    * @param options - Metadata options
    * @param security - Filestack security object
    */
-  metadata(handle: string, options?: MetadataOptions, security?: Security): Observable<object> {
+  metadata(
+    handle: string,
+    options?: MetadataOptions,
+    security?: Security
+  ): Observable<object> {
     return from(this.client.metadata(handle, options, security));
   }
 
@@ -102,24 +127,34 @@ export class FilestackService {
    * @param token - Optional control token to call .cancel()
    * @param security - Filestack security object
    */
-  storeURL(url: string, options?: StoreParams, token?: string, security?: Security): Observable<object> {
+  storeURL(
+    url: string,
+    options?: StoreParams,
+    token?: string,
+    security?: Security
+  ): Observable<object> {
     return from(this.client.storeURL(url, options, token, security));
   }
 
   /**
    * Upload a provided file
-   * @param file - A file to upload
+   * @param file - A file or array of files to upload
    * @param options - Upload options
    * @param storeOptions - Store options
    * @param token - Optional control token to call .cancel()
    * @param security - Filestack security object
    */
   upload(
-    file: InputFile,
+    file: InputFile | InputFile[],
     options?: UploadOptions,
     storeOptions?: StoreUploadOptions,
-    token?: string, security?: Security
+    token?: string,
+    security?: Security
   ): Observable<object> {
+    if (Array.isArray(file)) {
+      return from(this.client.multiupload(file, options, storeOptions, token, security));
+    }
+
     return from(this.client.upload(file, options, storeOptions, token, security));
   }
 
@@ -146,7 +181,10 @@ export class FilestackService {
    * @param handle - Filestack handle
    * @param options - Preview options
    */
-  preview(handle: string, options?: PreviewOptions): HTMLIFrameElement | Window {
+  preview(
+    handle: string,
+    options?: PreviewOptions
+  ): HTMLIFrameElement | Window {
     return this.client.preview(handle, options);
   }
 

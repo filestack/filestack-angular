@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { FilestackService } from './filestack.service';
 import { FilestackTransformPipe } from './filestack-transform.pipe';
 import { PickerOverlayComponent } from './picker/pickerOverlay.component';
 import { PickerInlineComponent } from './picker/pickerInline.component';
 import { PickerDropPaneComponent } from './picker/pickerDropPane.component';
+import { ClientOptions } from 'filestack-js';
+
+export type InitialConfig = {
+  apikey?: string,
+  options?: ClientOptions
+}
+
 
 @NgModule({
   imports: [
@@ -26,4 +33,13 @@ import { PickerDropPaneComponent } from './picker/pickerDropPane.component';
     FilestackTransformPipe
   ]
 })
-export class FilestackModule {}
+export class FilestackModule {
+
+  static forRoot(config: InitialConfig): ModuleWithProviders<FilestackModule> {
+
+    return {
+      ngModule: FilestackModule,
+      providers: [FilestackService, { provide: 'config', useValue: config }]
+    };
+  }
+}

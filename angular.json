@@ -14,6 +14,11 @@
           "options": {
             "tsConfig": "projects/filestack-angular/tsconfig.lib.json",
             "project": "projects/filestack-angular/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/filestack-angular/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -31,16 +36,18 @@
               "projects/filestack-angular/tsconfig.lib.json",
               "projects/filestack-angular/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
     },
     "example": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/example",
       "sourceRoot": "projects/example/src",
       "prefix": "app",
@@ -53,11 +60,12 @@
             "main": "projects/example/src/main.ts",
             "polyfills": "projects/example/src/polyfills.ts",
             "tsConfig": "projects/example/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/example/src/favicon.ico",
               "projects/example/src/assets"
             ],
+            "styles": ["projects/example/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -73,7 +81,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -82,6 +89,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -98,12 +109,6 @@
             }
           }
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "example:build"
-          }
-        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
@@ -115,9 +120,7 @@
               "projects/example/src/favicon.ico",
               "projects/example/src/assets"
             ],
-            "styles": [
-              "projects/example/src/styles.css"
-            ],
+            "styles": ["projects/example/src/styles.css"],
             "scripts": []
           }
         },
@@ -128,9 +131,7 @@
               "projects/example/tsconfig.app.json",
               "projects/example/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -146,6 +147,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "filestack-angular"
 }

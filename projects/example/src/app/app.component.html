@@ -1,60 +1,145 @@
-<div>
-  <h1>
-    Filestack angular example app
-  </h1>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>@filestack/angular examples</span>
+  </mat-toolbar-row>
+</mat-toolbar>
 
-  <h4>
-    To run examples, set correct api key in src/app/app.component.ts
-  </h4>
-  
-  <div class="example">
-    <span>Example #1 - open picker directly</span>
-    <ng-picker-overlay
-      [apikey]="apikey">
-    </ng-picker-overlay>
-  </div>
+<div fxLayout>
+  <mat-card>
+    <mat-card-title>
+      Install
+    </mat-card-title>
+    <mat-card-content>
+      <pre><code highlight>npm i @filestack/angular filestack-js</code></pre>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>
+      Import
+    </mat-card-title>
+    <mat-card-content>
+      <pre><code [highlight]="exampleCodes.importCode"></code></pre>
+    </mat-card-content>
+  </mat-card>
+</div>
 
-  <div class="example">
-    <span>Example #2 - open picker by clicking the custom button & handle upload Success</span>
-    <ng-picker-overlay
-      [apikey]="apikey"
-      (uploadSuccess)="onUploadSuccess($event)"
-      (uploadError)="onUploadError($event)">
-      <button>Open picker</button>
-    </ng-picker-overlay>
-  </div>
+<div fxLayout>
+  <mat-card>
+    <mat-card-subtitle
+      >Example #1 - open picker by clicking the custom button & handle upload
+      Success</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card>
+            <ng-picker-overlay
+              (uploadSuccess)="onUploadSuccess($event)"
+              (uploadError)="onUploadError($event)"
+            >
+              <button mat-raised-button color="primary">Open Picker</button>
+            </ng-picker-overlay>
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example1"></code></pre>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
 
-  <div class="example">
-    <span>Example #3 - open picker in inline mode</span>
-    <button (click)="showInline()">Show inline picker</button>
-    <ng-picker-inline *ngIf="isInline"
-      [apikey]="apikey"
-      [pickerOptions]=pickerOptions
-      (uploadSuccess)="onUploadSuccess($event)"
-      (uploadError)="onUploadError($event)">
-    </ng-picker-inline>
-  </div>
+  <mat-card>
+    <mat-card-subtitle
+      >Example #2 - open picker in inline mode</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card>
+            <ng-picker-inline
+              [pickerOptions]="pickerOptions"
+              (uploadSuccess)="onUploadSuccess($event)"
+              (uploadError)="onUploadError($event)"
+            >
+            </ng-picker-inline>
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example2"></code></pre>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
 
-  <div class="example">
-    <span>Example #4 - open picker in dropPane mode</span>
-    <button (click)="showDropPane()">Show dropPane picker</button>
-    <ng-picker-drop-pane *ngIf="isDropPane"
-      [apikey]="apikey"
-      (uploadSuccess)="onUploadSuccess($event)"
-      (uploadError)="onUploadError($event)">
-    </ng-picker-drop-pane>
-  </div>
+  <mat-card>
+    <mat-card-subtitle
+      >Example #3 - open picker in dropPane mode</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card>
+            <ng-picker-drop-pane
+              (uploadSuccess)="onUploadSuccess($event)"
+              (uploadError)="onUploadError($event)"
+            >
+            </ng-picker-drop-pane>
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example3"></code></pre>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
 
-  <div class="example">
-    <span>Example #5 - Generate img with filestack transform pipe</span>
-    <img class="example5img" src="{{'5aYkEQJSQCmYShsoCnZN' | filestackTransform: transformOptions}}">
-  </div>
+  <mat-card>
+    <mat-card-subtitle
+      >Example #4 - Generate img with filestack transform
+      pipe</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card>
+            <img
+              class="example5img"
+              src="{{
+                '5aYkEQJSQCmYShsoCnZN' | filestackTransform: transformOptions
+              }}"
+            />
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example4"></code></pre>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
 
-  <div class="example">
-    <span>Example #6 - Select file and upload using sdk client.upload() (check console for details)</span>
-    <div class="Block">
-      <input type='file' (change)="fileChanged($event)">
-    </div>
-    <button (click)="uploadFile()">Upload file</button>
-  </div>
+  <mat-card>
+    <mat-card-subtitle
+      >Example #5 - Select file and upload using sdk client.upload() (check
+      console for details)</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card>
+            <mat-card-content>
+              <input (change)="fileChanged($event)" type="file" matInput />
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="primary" (click)="uploadFile()">
+                Upload file
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </mat-tab>
+        <!-- <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example1"></code></pre>
+        </mat-tab> -->
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
 </div>
