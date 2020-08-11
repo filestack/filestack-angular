@@ -36,7 +36,9 @@
               "projects/filestack-angular/tsconfig.lib.json",
               "projects/filestack-angular/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -65,7 +67,9 @@
               "projects/example/src/favicon.ico",
               "projects/example/src/assets"
             ],
-            "styles": ["projects/example/src/styles.scss"],
+            "styles": [
+              "projects/example/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -120,7 +124,9 @@
               "projects/example/src/favicon.ico",
               "projects/example/src/assets"
             ],
-            "styles": ["projects/example/src/styles.css"],
+            "styles": [
+              "projects/example/src/styles.css"
+            ],
             "scripts": []
           }
         },
@@ -131,7 +137,9 @@
               "projects/example/tsconfig.app.json",
               "projects/example/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "e2e": {
@@ -149,5 +157,8 @@
       }
     }
   },
-  "defaultProject": "filestack-angular"
+  "defaultProject": "filestack-angular",
+  "cli": {
+    "analytics": false
+  }
 }
