@@ -10,7 +10,7 @@ import {
   FilestackError
 } from 'filestack-js';
 
-
+@Directive()
 export abstract class PickerBaseComponent implements OnInit, OnDestroy {
 
   public elementId = 'picker-container';
