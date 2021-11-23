@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### Features
+
+* **module:** Update project to support Angular 11.
+
 ### Bug Fixes
 
 * **build:** fix Compatibility issues with Angular 10.
