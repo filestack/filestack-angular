@@ -10,7 +10,7 @@
       "prefix": "ng-picker",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/filestack-angular/tsconfig.lib.json",
             "project": "projects/filestack-angular/ng-package.json"
