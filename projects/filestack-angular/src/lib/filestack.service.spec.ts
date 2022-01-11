@@ -1,48 +1,49 @@
-import { FilestackService } from './filestack.service';
 import { Observable } from 'rxjs';
+
+import { FilestackService } from './filestack.service';
 
 describe('FilestackService', () => {
   const fsClientMock = {
-    picker() {
+    picker(_options: object) {
       return true;
     },
-    transform() {
+    transform(_url: string, _options: object, _isB64: boolean) {
       return true;
     },
-    retrieve() {
+    retrieve(_handle: string, _options: object, _security: object) {
       return new Promise((resolve) => {
         resolve('Retrieve resolved');
       });
     },
-    metadata() {
+    metadata(_handle: string, _options: object, _security: object) {
       return new Promise((resolve) => {
         resolve('Metadata resolved');
       });
     },
-    storeURL() {
+    storeURL(_handle: string, _options: object, _token: string, _security: object) {
       return new Promise((resolve) => {
         resolve('StoreURL resolved');
       });
     },
-    upload() {
+    upload(_file: string, _options: object, _storeOptions: object, _token: string, _security: object) {
       return new Promise((resolve) => {
         resolve('Upload resolved');
       });
     },
-    remove() {
+    remove(_handle: string, _security: object) {
       return new Promise((resolve) => {
         resolve('Remove resolved');
       });
     },
-    removeMetadata() {
+    removeMetadata(_handle: string, _security: object) {
       return new Promise((resolve) => {
         resolve('RemoveMetadata resolved');
       });
     },
-    preview() {
+    preview(_url: string, _options: object) {
       return true;
     },
-    logout() {
+    logout(_name: string) {
       return new Promise((resolve) => {
         resolve('Logout resolved');
       });

@@ -1,17 +1,26 @@
-import { Input, Output, OnInit, Inject, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { FilestackService } from '../filestack.service';
 import {
+  Directive,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+
+import {
+  ClientOptions,
+  FilestackError,
+  InputFile,
   PickerInstance,
   PickerOptions,
-  ClientOptions,
-  InputFile,
   PickerResponse,
-  FilestackError
 } from 'filestack-js';
+import { Subject } from 'rxjs';
 
+import { FilestackService } from '../filestack.service';
 
-export abstract class PickerBaseComponent implements OnInit, OnDestroy {
+@Directive({})
+export abstract class PickerBaseDirective implements OnInit, OnDestroy {
 
   public elementId = 'picker-container';
 
