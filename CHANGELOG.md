@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### Bug Fixes
+
+* **build:** fix Compatibility issues with Angular 10.
+
 ## [1.3.0](https://github.com/filestack/filestack-angular/compare/v1.2.0...v1.3.0) (2020-10-05)
 
 
@@ -12,7 +16,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* **build:** fix problems with build library for angular < 9 
+* **build:** fix problems with build library for angular < 9
 
 
 ## [1.2.0](https://github.com/filestack/filestack-angular/compare/v1.0.2...v1.2.0) (2020-10-05)
