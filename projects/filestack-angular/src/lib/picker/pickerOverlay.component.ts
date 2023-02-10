@@ -18,6 +18,21 @@ export class PickerOverlayComponent extends PickerBaseDirective implements After
 
   public isActive = false;
 
+  @HostListener('click', ['$event'])
+  onClick(event) {
+    if (this.isActive) {
+      return;
+    }
+
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.isActive = true;
+
+    // Picker open success handler there is ommited, because it's accessible from pickerOptions
+    this.picker.open().catch(err => this.uploadError.next(err));
+  }
+
   ngAfterContentInit() {
     // Overwrite display mode to be always 'overlay' in this component
     this.picker = this.filestackService.picker({
@@ -42,20 +57,5 @@ export class PickerOverlayComponent extends PickerBaseDirective implements After
         this.generateId();
       }
     });
-  }
-
-  @HostListener('click', ['$event'])
-  onClick(event) {
-    if (this.isActive) {
-      return;
-    }
-
-    event.stopPropagation();
-    event.preventDefault();
-
-    this.isActive = true;
-
-    // Picker open success handler there is ommited, because it's accessible from pickerOptions
-    this.picker.open().catch(err => this.uploadError.next(err));
   }
 }

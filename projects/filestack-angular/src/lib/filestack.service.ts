@@ -51,6 +51,7 @@ export class FilestackService {
 
   /**
    * Set another client instance as this one used by FilestackService
+   *
    * @param client - An instance of filestack client class
    */
   setClientInstance(client: Client) {
@@ -61,6 +62,7 @@ export class FilestackService {
 
   /**
    * Initialize filestack client
+   *
    * @param apikey - Filestack apikey
    * @param clientOptions - Client options
    */
@@ -72,6 +74,7 @@ export class FilestackService {
 
   /**
    * Instance of picker class
+   *
    * @param options - picker options
    */
   picker(options?: PickerOptions): PickerInstance {
@@ -80,6 +83,7 @@ export class FilestackService {
 
   /**
    * Generate url with filestack transformations
+   *
    * @param url - Filestack handle or external url
    * @param options - Transformation options
    * @param b64 - Encode url params in base64
@@ -94,6 +98,7 @@ export class FilestackService {
 
   /**
    * Access files via their Filestack handles
+   *
    * @param handle - Filestack handle
    * @param options - Retrieve options
    * @param security - Filestack security object
@@ -108,6 +113,7 @@ export class FilestackService {
 
   /**
    * Retrieve detailed data of stored files
+   *
    * @param handle - Filestack handle
    * @param options - Metadata options
    * @param security - Filestack security object
@@ -122,6 +128,7 @@ export class FilestackService {
 
   /**
    * Store a file from its URL
+   *
    * @param url - Valid url to file
    * @param options - Store params
    * @param token - Optional control token to call .cancel()
@@ -138,6 +145,7 @@ export class FilestackService {
 
   /**
    * Upload a provided file
+   *
    * @param file - A file or array of files to upload
    * @param options - Upload options
    * @param storeOptions - Store options
@@ -160,6 +168,7 @@ export class FilestackService {
 
   /**
    * Remove a file from storage and the Filestack system
+   *
    * @param handle - Filestack handle
    * @param security - Filestack security object
    */
@@ -169,6 +178,7 @@ export class FilestackService {
 
   /**
    * Remove a file only from the Filestack system. The file remains in storage
+   *
    * @param handle - Filestack handle
    * @param security - Filestack security object
    */
@@ -178,6 +188,7 @@ export class FilestackService {
 
   /**
    * Used for viewing files via Filestack handles or storage aliases
+   *
    * @param handle - Filestack handle
    * @param options - Preview options
    */
@@ -191,6 +202,7 @@ export class FilestackService {
   /**
    * Clear all current cloud sessions in the picker or
    * particular one if name is passed
+   *
    * @param name - Optional cloud name to be passed
    */
   logout(name?: string): Observable<object> {

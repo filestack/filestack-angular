@@ -4,50 +4,37 @@ import { FilestackService } from './filestack.service';
 
 describe('FilestackService', () => {
   const fsClientMock = {
-    picker(_options: object) {
-      return true;
-    },
-    transform(_url: string, _options: object, _isB64: boolean) {
-      return true;
-    },
-    retrieve(_handle: string, _options: object, _security: object) {
-      return new Promise((resolve) => {
-        resolve('Retrieve resolved');
-      });
-    },
-    metadata(_handle: string, _options: object, _security: object) {
-      return new Promise((resolve) => {
-        resolve('Metadata resolved');
-      });
-    },
-    storeURL(_handle: string, _options: object, _token: string, _security: object) {
-      return new Promise((resolve) => {
-        resolve('StoreURL resolved');
-      });
-    },
-    upload(_file: string, _options: object, _storeOptions: object, _token: string, _security: object) {
-      return new Promise((resolve) => {
-        resolve('Upload resolved');
-      });
-    },
-    remove(_handle: string, _security: object) {
-      return new Promise((resolve) => {
-        resolve('Remove resolved');
-      });
-    },
-    removeMetadata(_handle: string, _security: object) {
-      return new Promise((resolve) => {
-        resolve('RemoveMetadata resolved');
-      });
-    },
-    preview(_url: string, _options: object) {
-      return true;
-    },
-    logout(_name: string) {
-      return new Promise((resolve) => {
-        resolve('Logout resolved');
-      });
-    }
+    picker: (_options: object) => true,
+    transform: (_url: string, _options: object, _isB64: boolean) => true,
+    retrieve: (_handle: string, _options: object, _security: object) =>
+    new Promise((resolve) => {
+      resolve('Retrieve resolved');
+    }),
+    metadata: (_handle: string, _options: object, _security: object) =>
+    new Promise((resolve) => {
+      resolve('Metadata resolved');
+    }),
+    storeURL: (_handle: string, _options: object, _token: string, _security: object) =>
+    new Promise((resolve) => {
+      resolve('StoreURL resolved');
+    }),
+    upload: (_file: string, _options: object, _storeOptions: object, _token: string, _security: object) =>
+    new Promise((resolve) => {
+      resolve('Upload resolved');
+    }),
+    remove: (_handle: string, _security: object) =>
+    new Promise((resolve) => {
+      resolve('Remove resolved');
+    }),
+    removeMetadata: (_handle: string, _security: object) =>
+    new Promise((resolve) => {
+      resolve('RemoveMetadata resolved');
+    }),
+    preview: (_url: string, _options: object) => true,
+    logout: (_name: string) =>
+    new Promise((resolve) => {
+      resolve('Logout resolved');
+    }),
   };
 
   const exampleHandle = 'TESToQJSQCmYShsoCnZN';

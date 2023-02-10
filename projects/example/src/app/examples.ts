@@ -1,4 +1,4 @@
-export const Code = {
+export const code = {
   importCode: `import { FilestackModule } from '@filestack/angular';
 
 @NgModule({
