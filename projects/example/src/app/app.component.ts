@@ -1,7 +1,7 @@
 import { Component,  OnInit} from '@angular/core';
 import { FilestackService } from './../../../filestack-angular/src/public-api';
 import { InputFile, TransformOptions, PickerOptions } from 'filestack-js';
-import { code } from './examples';
+import { Code } from './examples';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   isInline = false;
   isDropPane = false;
 
-  exampleCodes = code;
+  exampleCodes = Code;
 
   constructor(private filestackService: FilestackService) {}
 

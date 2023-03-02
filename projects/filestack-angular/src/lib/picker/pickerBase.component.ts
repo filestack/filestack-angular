@@ -22,6 +22,8 @@ import { FilestackService } from '../filestack.service';
 @Directive({})
 export abstract class PickerBaseDirective implements OnInit, OnDestroy {
 
+  public elementId = 'picker-container';
+
   @Input() apikey: string;
   @Input() pickerOptions: PickerOptions;
   @Input() clientOptions: ClientOptions;
@@ -30,8 +32,6 @@ export abstract class PickerBaseDirective implements OnInit, OnDestroy {
 
   @Output() uploadSuccess: Subject<PickerResponse>;
   @Output() uploadError: Subject<FilestackError>;
-
-  public elementId = 'picker-container';
 
   picker: PickerInstance;
 

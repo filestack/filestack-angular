@@ -8,9 +8,9 @@ import { PickerDropPaneComponent } from './picker/pickerDropPane.component';
 import { ClientOptions } from 'filestack-js';
 
 export type InitialConfig = {
-  apikey?: string;
-  options?: ClientOptions;
-};
+  apikey?: string,
+  options?: ClientOptions
+}
 
 
 @NgModule({
