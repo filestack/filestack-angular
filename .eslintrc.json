@@ -31,7 +31,12 @@
           "off",
           "always"
         ],
-        "import/order": "off"
+        "@typescript-eslint/member-delimiter-style": "off",
+        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/semi": "off",
+        "jsdoc/newline-after-description": "off",
+        "prefer-arrow/prefer-arrow-functions": "off"
       }
     },
     {
