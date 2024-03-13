@@ -1,6 +1,6 @@
 {
   "name": "@filestack/angular",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Angular module for filestack-js",
   "scripts": {
     "ng": "ng",

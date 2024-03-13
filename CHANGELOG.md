@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.2](https://github.com/filestack/filestack-angular/compare/v2.0.1...v2.0.2) (2024-03-13)
+
+
+### Bug Fixes
+
+* Merge conflict ([34ca76f](https://github.com/filestack/filestack-angular/commit/34ca76f5256025b470e39d98075cef9ad92d60ae))
+* **picker:** Compatibility issues with Angular 10  ([#35](https://github.com/filestack/filestack-angular/issues/35)) ([75b5967](https://github.com/filestack/filestack-angular/commit/75b5967b1be60a679b3bb6e76fe9495cffa38998))
+
 ### [2.0.1](https://github.com/filestack/filestack-angular/compare/v2.0.0...v2.0.1) (2023-12-13)
 
 ## [2.0.0](https://github.com/filestack/filestack-angular/compare/v1.5.0...v2.0.0) (2023-12-12) 
