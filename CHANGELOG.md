@@ -21,6 +21,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **build:** fix problems with build library for angular < 9 ([#14](https://github.com/filestack/filestack-angular/issues/14)) ([281106a](https://github.com/filestack/filestack-angular/commit/281106abc73975d486d1e6b90d89c237bf568bca))
 * **picker:** Compatibility issues with Angular 10  ([#35](https://github.com/filestack/filestack-angular/issues/35)) ([#37](https://github.com/filestack/filestack-angular/issues/37)) ([60495fe](https://github.com/filestack/filestack-angular/commit/60495fe23c62dc7d850b02b4803901936c2e25c9))
+### Bug Fixes
+
+* **build:** fix Compatibility issues with Angular 10.
 
 ## [1.3.0](https://github.com/filestack/filestack-angular/compare/v1.2.0...v1.3.0) (2020-10-05)
 
