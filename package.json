@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "build:umd": "rollup -c",
     "build": "ng build filestack-angular --configuration production",
     "test": "ng test filestack-angular --watch=false",
     "test:watch": "ng test filestack-angular",
@@ -12,7 +13,8 @@
     "e2e": "ng e2e",
     "release": "ng test filestack-angular --watch=false && ng build filestack-angular --configuration production && standard-version",
     "publishS3": "npx webpack",
-    "publish": "cd dist/filestack-angular/ && npm publish && cd ../../ && npm run publishS3"
+    "publish": "cd dist/filestack-angular/ && npm publish",
+    "publish:umd": "npm run build:umd && npm run publishS3"
   },
   "dependencies": {
     "@angular/animations": "^14.2.12",
@@ -41,6 +43,9 @@
     "@angular/cli": "^14.2.10",
     "@angular/compiler-cli": "^14.2.12",
     "@angular/language-service": "^14.2.12",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.8",
     "@types/node": "^14.0.27",
@@ -59,6 +64,8 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "ng-packagr": "^14.2.2",
     "protractor": "~7.0.0",
+    "rollup": "^2.79.1",
+    "rollup-plugin-terser": "^7.0.2",
     "standard-version": "^8.0.2",
     "ts-node": "~8.10.2",
     "typescript": "~4.6.4",
