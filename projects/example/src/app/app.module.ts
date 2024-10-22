@@ -40,10 +40,10 @@ import { MatTabsModule } from '@angular/material/tabs';
         languages: {
           typescript: () => import('highlight.js/lib/languages/typescript'),
           javascript: () => import('highlight.js/lib/languages/javascript'),
-          html: () => import('highlight.js/lib/languages/xml'),
+          html: () => import('highlight.js/lib/languages/xml')
         }
-      },
-    },
+      }
+    }
   ],
   bootstrap: [AppComponent]
 })
