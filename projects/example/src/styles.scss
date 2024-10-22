@@ -1,3 +1,18 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$light-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$blue-palette
+  ),
+));
+
+html {
+  @include mat.tabs-theme($light-theme);
+}
+
 @import "~@angular/material/prebuilt-themes/indigo-pink.css"; 
 @import '~highlight.js/styles/monokai-sublime.css';
 
@@ -15,4 +30,20 @@ body {
 .ng-picker {
   height: 350px;
 }
- 
+
+.mat-mdc-card-title, .mat-mdc-card-subtitle {
+  padding: 16px 16px 0 16px;
+}
+
+.custom-card-padding {
+  padding: 16px;
+}
+
+.example5img {
+  width: 55vh;
+}
+
+mat-card-actions.example5-btn {
+  padding-top: 20px;
+  padding-bottom: 12px;
+}
