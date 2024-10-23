@@ -33,7 +33,7 @@
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.4",
+    "@angular-devkit/build-angular": "^18.2.9",
     "@angular-devkit/core": "^18.2.4",
     "@angular-eslint/builder": "^18.4.0",
     "@angular-eslint/eslint-plugin": "^18.4.0",
@@ -77,6 +77,7 @@
     "url": "https://github.com/filestack/filestack-angular.git"
   },
   "overrides": {
-    "semver": "~7.5.2"
+    "semver": "~7.5.2",
+    "http-proxy-middleware": "3.0.3"
   }
 }

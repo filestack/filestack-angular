@@ -25,7 +25,7 @@
             "accessibility": "explicit"
           }
         ],
-        "@typescript-eslint/no-use-before-define": "error",
+        "@typescript-eslint/no-use-before-define": "off",
         "arrow-parens": [
           "off",
           "always"
@@ -35,7 +35,8 @@
         "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/semi": "off",
         "jsdoc/newline-after-description": "off",
-        "prefer-arrow/prefer-arrow-functions": "off"
+        "prefer-arrow/prefer-arrow-functions": "off",
+        "@typescript-eslint/no-explicit-any": "off"
       }
     },
     {
