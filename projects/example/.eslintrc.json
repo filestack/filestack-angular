@@ -10,8 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "projects/example/tsconfig.app.json",
-          "projects/example/tsconfig.spec.json"
+          "./projects/example/tsconfig.app.json",
+          "./projects/example/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },
@@ -38,8 +38,8 @@
             "accessibility": "explicit"
           }
         ],
-        "@typescript-eslint/no-explicit-any": "error",
-        "@typescript-eslint/no-use-before-define": "error",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-use-before-define": "off",
         "arrow-parens": [
           "off",
           "always"

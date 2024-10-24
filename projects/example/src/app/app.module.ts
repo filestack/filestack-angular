@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { FilestackModule } from './../../../filestack-angular/src/public-api';
 
-import { HighlightModule } from 'ngx-highlightjs';
+import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule} from '@angular/material/button';
@@ -31,6 +31,19 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatTabsModule,
     MatIconModule,
     MatCardModule
+  ],
+  providers: [
+    {
+      provide: HIGHLIGHT_OPTIONS,
+      useValue: {
+        coreLibraryLoader: () => import('highlight.js/lib/core'),
+        languages: {
+          typescript: () => import('highlight.js/lib/languages/typescript'),
+          javascript: () => import('highlight.js/lib/languages/javascript'),
+          html: () => import('highlight.js/lib/languages/xml')
+        }
+      }
+    }
   ],
   bootstrap: [AppComponent]
 })
