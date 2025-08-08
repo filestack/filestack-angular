@@ -1,6 +1,6 @@
-import { InitialConfig } from './filestack.module';
-import { Injectable, Inject, Optional } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { FILSTACK_CONFIG, InitialConfig } from "./filestack.module";
+import { Injectable, Inject, Optional } from "@angular/core";
+import { from, Observable } from "rxjs";
 import {
   PickerOptions,
   PickerInstance,
@@ -16,19 +16,19 @@ import {
   ClientOptions,
   Client,
   init,
-} from 'filestack-js';
-
+} from "filestack-js";
 
 @Injectable()
 export class FilestackService {
-
   private clientInstance: Client;
 
   private clientOptions: ClientOptions;
 
   private apikey: string;
 
-  constructor(@Optional() @Inject('config') private config?: InitialConfig) {
+  constructor(
+    @Optional() @Inject(FILSTACK_CONFIG) private config?: InitialConfig
+  ) {
     if (!config) {
       return;
     }
@@ -65,7 +65,10 @@ export class FilestackService {
    * @param clientOptions - Client options
    */
   init(apikey?: string, clientOptions?: ClientOptions): Client {
-    this.client = init(apikey || this.apikey, clientOptions || this.clientOptions);
+    this.client = init(
+      apikey || this.apikey,
+      clientOptions || this.clientOptions
+    );
 
     return this.client;
   }
@@ -152,10 +155,14 @@ export class FilestackService {
     security?: Security
   ): Observable<object> {
     if (Array.isArray(file)) {
-      return from(this.client.multiupload(file, options, storeOptions, token, security));
+      return from(
+        this.client.multiupload(file, options, storeOptions, token, security)
+      );
     }
 
-    return from(this.client.upload(file, options, storeOptions, token, security));
+    return from(
+      this.client.upload(file, options, storeOptions, token, security)
+    );
   }
 
   /**
