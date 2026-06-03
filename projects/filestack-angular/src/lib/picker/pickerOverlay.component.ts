@@ -1,12 +1,14 @@
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   HostListener,
 } from '@angular/core';
 
 import { PickerDisplayMode } from 'filestack-js';
 
+import { FilestackService } from '../filestack.service';
 import { PickerBaseDirective } from './pickerBase.component';
 
 @Component({
@@ -17,6 +19,13 @@ import { PickerBaseDirective } from './pickerBase.component';
 export class PickerOverlayComponent extends PickerBaseDirective implements AfterContentInit {
 
   public isActive = false;
+
+  constructor(
+    filestackService: FilestackService,
+    private cdr: ChangeDetectorRef
+  ) {
+    super(filestackService);
+  }
 
   ngAfterContentInit() {
     // Overwrite display mode to be always 'overlay' in this component
@@ -29,6 +38,7 @@ export class PickerOverlayComponent extends PickerBaseDirective implements After
       onClose: () => {
         this.isActive = false;
         this.generateId();
+        this.cdr.markForCheck();
       }
     });
   }
