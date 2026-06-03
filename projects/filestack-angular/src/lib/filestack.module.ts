@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { InjectionToken, NgModule, ModuleWithProviders } from '@angular/core';
 import { FilestackService } from './filestack.service';
 import { FilestackTransformPipe } from './filestack-transform.pipe';
 import { PickerOverlayComponent } from './picker/pickerOverlay.component';
@@ -11,6 +11,8 @@ export type InitialConfig = {
   apikey?: string,
   options?: ClientOptions
 }
+
+export const FILESTACK_CONFIG = new InjectionToken<InitialConfig>('filestack.config');
 
 
 @NgModule({
@@ -39,7 +41,7 @@ export class FilestackModule {
 
     return {
       ngModule: FilestackModule,
-      providers: [FilestackService, { provide: 'config', useValue: config }]
+      providers: [FilestackService, { provide: FILESTACK_CONFIG, useValue: config }]
     };
   }
 }

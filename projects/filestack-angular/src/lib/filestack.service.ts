@@ -1,4 +1,4 @@
-import { InitialConfig } from './filestack.module';
+import { FILESTACK_CONFIG, InitialConfig } from './filestack.module';
 import { Injectable, Inject, Optional } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import {
@@ -28,7 +28,7 @@ export class FilestackService {
 
   private apikey: string;
 
-  constructor(@Optional() @Inject('config') private config?: InitialConfig) {
+  constructor(@Optional() @Inject(FILESTACK_CONFIG) private config?: InitialConfig) {
     if (!config) {
       return;
     }
