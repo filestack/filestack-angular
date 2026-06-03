@@ -27,7 +27,6 @@ export class PickerInlineComponent extends PickerBaseDirective implements AfterC
 
     // Picker open success handler there is ommited, because it's accessible from pickerOptions
     this.picker.open()
-      .then(void (0))
       .catch(err => this.uploadError.next(err));
   }
 }
