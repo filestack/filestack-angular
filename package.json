@@ -2,6 +2,9 @@
   "name": "@filestack/angular",
   "version": "3.0.0",
   "description": "Angular module for filestack-js",
+  "engines": {
+    "node": ">=22.22.3"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
