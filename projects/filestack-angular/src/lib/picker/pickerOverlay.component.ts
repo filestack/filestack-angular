@@ -31,17 +31,6 @@ export class PickerOverlayComponent extends PickerBaseDirective implements After
         this.generateId();
       }
     });
-
-    console.log({
-      ...this.pickerOptions,
-      container: `#${this.elementId}`,
-      displayMode: PickerDisplayMode.overlay,
-      onUploadDone: res => this.uploadSuccess.next(res),
-      onClose: () => {
-        this.isActive = false;
-        this.generateId();
-      }
-    });
   }
 
   @HostListener('click', ['$event'])
