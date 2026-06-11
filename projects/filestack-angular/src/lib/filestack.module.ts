@@ -14,15 +14,14 @@ export { FILESTACK_CONFIG, InitialConfig } from './filestack-config';
 @NgModule({
   imports: [
     CommonModule,
-  ],
-  providers: [
-    FilestackService
-  ],
-  declarations: [
+    // Components and the pipe are standalone, so they are imported (not declared).
     PickerOverlayComponent,
     PickerInlineComponent,
     PickerDropPaneComponent,
     FilestackTransformPipe
+  ],
+  providers: [
+    FilestackService
   ],
   exports: [
     PickerOverlayComponent,
@@ -33,6 +32,11 @@ export { FILESTACK_CONFIG, InitialConfig } from './filestack-config';
 })
 export class FilestackModule {
 
+  /**
+   * @deprecated Prefer the standalone `provideFilestack(config)` with
+   * `bootstrapApplication()` / `ApplicationConfig`. `FilestackModule.forRoot()`
+   * is kept for backward compatibility and will be removed in a future major release.
+   */
   static forRoot(config: InitialConfig): ModuleWithProviders<FilestackModule> {
 
     return {

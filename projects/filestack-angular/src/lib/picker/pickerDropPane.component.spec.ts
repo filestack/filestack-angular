@@ -32,8 +32,7 @@ describe('PickerDropPaneComponent', () => {
     filestackServiceMock.picker.calls.reset();
 
     await TestBed.configureTestingModule({
-      imports: [CommonModule],
-      declarations: [PickerDropPaneComponent],
+      imports: [CommonModule, PickerDropPaneComponent],
       providers: [{ provide: FilestackService, useValue: filestackServiceMock }]
     }).compileComponents();
 

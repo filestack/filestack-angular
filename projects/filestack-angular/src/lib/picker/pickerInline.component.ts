@@ -10,6 +10,7 @@ import { PickerBaseDirective } from './pickerBase.component';
 
 @Component({
   selector: 'ng-picker-inline',
+  standalone: true,
   template: '<div [id]="elementId" class="ng-picker"></div>',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -34,8 +34,7 @@ describe('PickerOverlayComponent', () => {
     filestackServiceMock.picker.calls.reset();
 
     await TestBed.configureTestingModule({
-      imports: [CommonModule],
-      declarations: [PickerOverlayComponent],
+      imports: [CommonModule, PickerOverlayComponent],
       providers: [{ provide: FilestackService, useValue: filestackServiceMock }]
     }).compileComponents();
 

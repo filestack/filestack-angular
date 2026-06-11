@@ -5,6 +5,7 @@ import {
   Component,
   HostListener,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { PickerDisplayMode } from 'filestack-js';
 
@@ -13,6 +14,8 @@ import { PickerBaseDirective } from './pickerBase.component';
 
 @Component({
   selector: 'ng-picker-overlay',
+  standalone: true,
+  imports: [CommonModule],
   template: '<div><ng-content class="ng-picker"></ng-content><div *ngIf="isActive" [id]="elementId"></div></div>',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

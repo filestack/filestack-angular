@@ -9,3 +9,4 @@ export * from './lib/picker/pickerInline.component';
 export * from './lib/filestack.module';
 export * from './lib/filestack-transform.pipe';
 export * from './lib/filestack-utils';
+export * from './lib/provide-filestack';

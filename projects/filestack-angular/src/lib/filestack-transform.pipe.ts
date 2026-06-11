@@ -5,7 +5,7 @@ import {
 import { FilestackService } from './filestack.service';
 import { TransformOptions } from 'filestack-js';
 
-@Pipe({name: 'filestackTransform'})
+@Pipe({ name: 'filestackTransform', standalone: true })
 export class FilestackTransformPipe implements PipeTransform {
 
   constructor(private filestackService: FilestackService) {}

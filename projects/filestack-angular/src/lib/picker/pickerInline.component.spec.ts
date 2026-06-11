@@ -32,8 +32,7 @@ describe('PickerInlineComponent', () => {
     filestackServiceMock.picker.calls.reset();
 
     await TestBed.configureTestingModule({
-      imports: [CommonModule],
-      declarations: [PickerInlineComponent],
+      imports: [CommonModule, PickerInlineComponent],
       providers: [{ provide: FilestackService, useValue: filestackServiceMock }]
     }).compileComponents();
 
