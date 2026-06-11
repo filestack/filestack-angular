@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { PickerDisplayMode } from 'filestack-js';
 
@@ -16,6 +17,10 @@ import { PickerBaseDirective } from './pickerBase.component';
 })
 export class PickerInlineComponent extends PickerBaseDirective implements AfterContentInit {
   ngAfterContentInit() {
+    // Picker creation/open accesses the DOM (document); skip it on the server.
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     // Overwrite display mode to be always 'inline' in this component
     this.picker = this.filestackService.picker({

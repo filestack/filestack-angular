@@ -1,5 +1,6 @@
 import { FILESTACK_CONFIG } from './filestack-config';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { from, Observable } from 'rxjs';
 import {
   PickerOptions,
@@ -41,6 +42,8 @@ export class FilestackService {
   private apikey: string;
 
   private config = inject(FILESTACK_CONFIG, { optional: true });
+
+  private platformId = inject(PLATFORM_ID);
 
   constructor() {
     if (!this.config) {
@@ -236,14 +239,21 @@ export class FilestackService {
   }
 
   /**
-   * Used for viewing files via Filestack handles or storage aliases
+   * Used for viewing files via Filestack handles or storage aliases.
+   *
+   * Returns `null` when running on the server (SSR), since preview renders into
+   * the DOM and has no meaning outside the browser.
    * @param handle - Filestack handle
    * @param options - Preview options
    */
   preview(
     handle: string,
     options?: PreviewOptions
-  ): HTMLIFrameElement | Window {
+  ): HTMLIFrameElement | Window | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+
     return this.client.preview(handle, options);
   }
 

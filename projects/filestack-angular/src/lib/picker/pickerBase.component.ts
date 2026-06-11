@@ -2,10 +2,12 @@ import {
   DestroyRef,
   Directive,
   OnInit,
+  PLATFORM_ID,
   inject,
   input,
   output,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import {
   ClientOptions,
@@ -35,6 +37,7 @@ export abstract class PickerBaseDirective implements OnInit {
   picker: PickerInstance;
 
   protected filestackService = inject(FilestackService);
+  protected platformId = inject(PLATFORM_ID);
   private destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -43,7 +46,11 @@ export abstract class PickerBaseDirective implements OnInit {
   }
 
   ngOnInit() {
-    this.filestackService.init(this.apikey(), this.clientOptions());
+    // filestack-js client init is DOM-free, but there's no value initializing
+    // it on the server where the picker can never open.
+    if (isPlatformBrowser(this.platformId)) {
+      this.filestackService.init(this.apikey(), this.clientOptions());
+    }
   }
 
   generateId() {

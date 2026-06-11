@@ -57,6 +57,22 @@ which can be also used independently if needed
 client methods (`download`, `prefetch`, `setSecurity`, `setCname`, and the extra
 `storeURL` params) are exposed by the service but require filestack-js v4 at runtime.
 
+## Server-Side Rendering (SSR)
+The library is SSR-safe (Angular Universal). Because the Filestack picker and
+`preview()` need the browser DOM, they are guarded by `isPlatformBrowser`:
+
+- The picker components (`ng-picker-overlay`, `ng-picker-inline`, `ng-picker-drop-pane`)
+  render their container element on the server but **do not** initialize or open the
+  picker — that happens only in the browser, after hydration.
+- `FilestackService.preview()` returns **`null`** on the server (its return type is
+  `HTMLIFrameElement | Window | null`); guard for `null` in your code.
+- `FilestackService.init()` is safe to call on the server (it only constructs the
+  filestack-js client and does not touch the DOM). DOM-dependent methods such as
+  `picker()` and `preview()` should still only be called in the browser.
+
+No extra configuration is required — just render as usual; the components produce no
+errors during server rendering.
+
 ## Usage
 ### Installation
 Install it through NPM
@@ -134,7 +150,7 @@ Methods get the same input params as client class method.
 | prefetch          | Observable                                                                                | Check permissions before running operations (filestack-js v4+)                |
 | remove            | Observable                                                                                | Remove a file from the Filestack                                              |
 | removeMetadata    | Observable                                                                                | Remove a file only from the Filestack system. The file remains in storage.     |
-| preview           | HTMLIFrameElement | Window                                                                | Get preview of uploaded file (need additional addon in your Filestack account)|
+| preview           | HTMLIFrameElement | Window | null                                                         | Get preview of uploaded file (returns `null` on the server/SSR; needs a preview addon)|
 | logout            | Observable                                                                                | Clear cloud session from picker procviders                                   |
 | setSecurity       | void                                                                                      | Update the client security object at runtime (filestack-js v4+)               |
 | setCname          | void                                                                                      | Update the client CNAME at runtime (filestack-js v4+)                          |

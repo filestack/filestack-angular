@@ -6,6 +6,7 @@ import {
   HostListener,
   inject,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { PickerDisplayMode } from 'filestack-js';
 
@@ -24,6 +25,11 @@ export class PickerOverlayComponent extends PickerBaseDirective implements After
   private cdr = inject(ChangeDetectorRef);
 
   ngAfterContentInit() {
+    // Picker creation accesses the DOM (document); skip it on the server.
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     // Overwrite display mode to be always 'overlay' in this component
     this.picker = this.filestackService.picker({
       ...this.pickerOptions(),
