@@ -1,3 +1,4 @@
+import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
@@ -104,7 +105,8 @@ describe('FilestackService', () => {
     spyOn(fsClientMock, 'removeMetadata').and.callThrough();
     spyOn(fsClientMock, 'preview').and.callThrough();
     spyOn(fsClientMock, 'logout').and.callThrough();
-    service = new FilestackService();
+    // FilestackService now uses inject(), so build it inside an injection context.
+    service = Injector.create({ providers: [{ provide: FilestackService, deps: [] }] }).get(FilestackService);
     service.setClientInstance(fsClientMock);
   });
 

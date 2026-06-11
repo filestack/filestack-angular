@@ -1,5 +1,5 @@
-import { FILESTACK_CONFIG, InitialConfig } from './filestack-config';
-import { Injectable, Inject, Optional } from '@angular/core';
+import { FILESTACK_CONFIG } from './filestack-config';
+import { Injectable, inject } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import {
   PickerOptions,
@@ -40,13 +40,15 @@ export class FilestackService {
 
   private apikey: string;
 
-  constructor(@Optional() @Inject(FILESTACK_CONFIG) private config?: InitialConfig) {
-    if (!config) {
+  private config = inject(FILESTACK_CONFIG, { optional: true });
+
+  constructor() {
+    if (!this.config) {
       return;
     }
 
-    this.clientOptions = config.options;
-    this.apikey = config.apikey;
+    this.clientOptions = this.config.options;
+    this.apikey = this.config.apikey;
   }
 
   private get client(): Client {

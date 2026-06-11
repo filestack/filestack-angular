@@ -18,15 +18,15 @@ export class PickerDropPaneComponent extends PickerBaseDirective implements Afte
   ngAfterContentInit() {
     // Overwrite display mode to be always 'dropPane' in this component
     this.picker = this.filestackService.picker({
-      ...this.pickerOptions,
+      ...this.pickerOptions(),
       rootId: `picker-drop-pane-${Date.now()}`,
       displayMode: PickerDisplayMode.dropPane,
       container: this.elementId,
-      onUploadDone: res => this.uploadSuccess.next(res)
+      onUploadDone: res => this.uploadSuccess.emit(res)
     });
 
     // Picker open success handler there is ommited, because it's accessible from pickerOptions
     this.picker.open()
-      .catch(err => this.uploadError.next(err));
+      .catch(err => this.uploadError.emit(err));
   }
 }

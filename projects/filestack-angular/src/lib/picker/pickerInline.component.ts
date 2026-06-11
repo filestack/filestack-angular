@@ -19,15 +19,15 @@ export class PickerInlineComponent extends PickerBaseDirective implements AfterC
 
     // Overwrite display mode to be always 'inline' in this component
     this.picker = this.filestackService.picker({
-      ...this.pickerOptions,
+      ...this.pickerOptions(),
       rootId: `picker-inline-${Date.now()}`,
       displayMode: PickerDisplayMode.inline,
       container: this.elementId,
-      onUploadDone: res => this.uploadSuccess.next(res)
+      onUploadDone: res => this.uploadSuccess.emit(res)
     });
 
     // Picker open success handler there is ommited, because it's accessible from pickerOptions
     this.picker.open()
-      .catch(err => this.uploadError.next(err));
+      .catch(err => this.uploadError.emit(err));
   }
 }

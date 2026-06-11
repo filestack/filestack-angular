@@ -1,3 +1,4 @@
+import { Injector } from '@angular/core';
 import { TransformOptions } from 'filestack-js';
 
 import { FilestackService } from './filestack.service';
@@ -12,7 +13,14 @@ describe('FilestackTransformPipe', () => {
 
   beforeEach(() => {
     filestackServiceMock.transform.calls.reset();
-    pipe = new FilestackTransformPipe(filestackServiceMock as unknown as FilestackService);
+    // The pipe now uses inject(), so build it inside an injection context
+    // that provides the mocked FilestackService.
+    pipe = Injector.create({
+      providers: [
+        { provide: FilestackService, useValue: filestackServiceMock },
+        { provide: FilestackTransformPipe, deps: [] }
+      ]
+    }).get(FilestackTransformPipe);
   });
 
   it('should create', () => {
