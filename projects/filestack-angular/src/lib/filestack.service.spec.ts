@@ -27,10 +27,27 @@ describe('FilestackService', () => {
         resolve('Metadata resolved');
       });
     },
-    storeURL(_handle: string, _options: object, _token: string, _security: object) {
+    storeURL(_handle: string, _options: object, _token: string, _security: object,
+             _uploadTags?: object, _headers?: object, _workflowIds?: string[]) {
       return new Promise((resolve) => {
         resolve('StoreURL resolved');
       });
+    },
+    download(_handle: string, _security: object) {
+      return new Promise((resolve) => {
+        resolve('Download resolved');
+      });
+    },
+    prefetch(_params: object) {
+      return new Promise((resolve) => {
+        resolve('Prefetch resolved');
+      });
+    },
+    setSecurity(_security: object) {
+      return true;
+    },
+    setCname(_cname: string) {
+      return true;
     },
     upload(_file: string, _options: object, _storeOptions: object, _token: string, _security: object) {
       return new Promise((resolve) => {
@@ -77,6 +94,10 @@ describe('FilestackService', () => {
     spyOn(fsClientMock, 'retrieve').and.callThrough();
     spyOn(fsClientMock, 'metadata').and.callThrough();
     spyOn(fsClientMock, 'storeURL').and.callThrough();
+    spyOn(fsClientMock, 'download').and.callThrough();
+    spyOn(fsClientMock, 'prefetch').and.callThrough();
+    spyOn(fsClientMock, 'setSecurity').and.callThrough();
+    spyOn(fsClientMock, 'setCname').and.callThrough();
     spyOn(fsClientMock, 'upload').and.callThrough();
     spyOn(fsClientMock, 'multiupload').and.callThrough();
     spyOn(fsClientMock, 'remove').and.callThrough();
@@ -141,7 +162,8 @@ describe('FilestackService', () => {
     it('should pass proper params to client method', () => {
       const result = service.storeURL(exampleHandle, exampleOptions, exampleToken, exampleSecurity);
       expect(fsClientMock.storeURL).toHaveBeenCalledTimes(1);
-      expect(fsClientMock.storeURL).toHaveBeenCalledWith(exampleHandle, exampleOptions, exampleToken, exampleSecurity);
+      expect(fsClientMock.storeURL).toHaveBeenCalledWith(
+        exampleHandle, exampleOptions, exampleToken, exampleSecurity, undefined, undefined, undefined);
       expect(result).toEqual(jasmine.any(Observable));
     });
     it('should return observable', (done: DoneFn) => {
@@ -149,6 +171,64 @@ describe('FilestackService', () => {
         expect(value).toBe('StoreURL resolved');
         done();
       });
+    });
+    it('should forward v4 params (uploadTags, headers, workflowIds) to client method', () => {
+      const uploadTags = { foo: 'bar' };
+      const headers = { 'x-custom': 'value' };
+      const workflowIds = ['workflow-1'];
+      service.storeURL(exampleUrl, exampleOptions, exampleToken, exampleSecurity, uploadTags, headers, workflowIds);
+      expect(fsClientMock.storeURL).toHaveBeenCalledTimes(1);
+      expect(fsClientMock.storeURL).toHaveBeenCalledWith(
+        exampleUrl, exampleOptions, exampleToken, exampleSecurity, uploadTags, headers, workflowIds);
+    });
+  });
+
+  describe('download method', () => {
+    it('should pass proper params to client method', () => {
+      const result = service.download(exampleHandle, exampleSecurity);
+      expect(fsClientMock.download).toHaveBeenCalledTimes(1);
+      expect(fsClientMock.download).toHaveBeenCalledWith(exampleHandle, exampleSecurity);
+      expect(result).toEqual(jasmine.any(Observable));
+    });
+    it('should return observable', (done: DoneFn) => {
+      service.download(exampleHandle, exampleSecurity).subscribe(value => {
+        expect(value).toBe('Download resolved');
+        done();
+      });
+    });
+  });
+
+  describe('prefetch method', () => {
+    it('should pass proper params to client method', () => {
+      const result = service.prefetch(exampleOptions);
+      expect(fsClientMock.prefetch).toHaveBeenCalledTimes(1);
+      expect(fsClientMock.prefetch).toHaveBeenCalledWith(exampleOptions);
+      expect(result).toEqual(jasmine.any(Observable));
+    });
+    it('should return observable', (done: DoneFn) => {
+      service.prefetch(exampleOptions).subscribe(value => {
+        expect(value).toBe('Prefetch resolved');
+        done();
+      });
+    });
+  });
+
+  describe('setSecurity method', () => {
+    it('should delegate to client method', () => {
+      const result = service.setSecurity(exampleSecurity);
+      expect(fsClientMock.setSecurity).toHaveBeenCalledTimes(1);
+      expect(fsClientMock.setSecurity).toHaveBeenCalledWith(exampleSecurity);
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('setCname method', () => {
+    it('should delegate to client method', () => {
+      const cname = 'cdn.example.com';
+      const result = service.setCname(cname);
+      expect(fsClientMock.setCname).toHaveBeenCalledTimes(1);
+      expect(fsClientMock.setCname).toHaveBeenCalledWith(cname);
+      expect(result).toBeUndefined();
     });
   });
 

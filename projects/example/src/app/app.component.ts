@@ -61,6 +61,12 @@ export class AppComponent implements OnInit {
       .subscribe(value => console.log(value));
   }
 
+  // filestack-js v4: download a file by handle (recommended over the deprecated retrieve())
+  downloadFile(handle: string) {
+    this.filestackService.download(handle)
+      .subscribe(response => console.log('### download', response));
+  }
+
   onUploadSuccess(res: object) {
     console.log('###uploadSuccess', res);
   }

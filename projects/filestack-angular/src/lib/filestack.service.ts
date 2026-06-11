@@ -15,8 +15,20 @@ import {
   PreviewOptions,
   ClientOptions,
   Client,
+  PrefetchOptions,
+  PrefetchResponse,
+  UploadTags,
   init,
 } from 'filestack-js';
+
+/**
+ * Response returned by {@link FilestackService.download}.
+ *
+ * filestack-js declares `FsResponse` internally but does not re-export it from
+ * its public entrypoint, so we derive it from the client's `download` signature
+ * to expose a named, stable type to consumers (works on both v3 and v4).
+ */
+export type FsResponse = Awaited<ReturnType<Client['download']>>;
 
 
 @Injectable()
@@ -97,6 +109,9 @@ export class FilestackService {
    * @param handle - Filestack handle
    * @param options - Retrieve options
    * @param security - Filestack security object
+   * @deprecated Since filestack-js v4. Use {@link FilestackService.download}
+   * (to fetch file contents) or {@link FilestackService.metadata} (for file
+   * details) instead. `retrieve()` will be removed in a future major release.
    */
   retrieve(
     handle: string,
@@ -126,14 +141,56 @@ export class FilestackService {
    * @param options - Store params
    * @param token - Optional control token to call .cancel()
    * @param security - Filestack security object
+   * @param uploadTags - Optional key/value tags to attach to the stored file (filestack-js v4+)
+   * @param headers - Optional request headers to send with the store request (filestack-js v4+)
+   * @param workflowIds - Optional Filestack Workflow ids to trigger after storing (filestack-js v4+)
    */
   storeURL(
     url: string,
     options?: StoreParams,
     token?: string,
-    security?: Security
+    security?: Security,
+    uploadTags?: UploadTags,
+    headers?: { [key: string]: string },
+    workflowIds?: string[]
   ): Observable<object> {
-    return from(this.client.storeURL(url, options, token, security));
+    return from(this.client.storeURL(url, options, token, security, uploadTags, headers, workflowIds));
+  }
+
+  /**
+   * Download a file via its Filestack handle (filestack-js v4+).
+   *
+   * Recommended replacement for the deprecated {@link FilestackService.retrieve}.
+   * @param handle - Filestack handle
+   * @param security - Filestack security object
+   */
+  download(handle: string, security?: Security): Observable<FsResponse> {
+    return from(this.client.download(handle, security));
+  }
+
+  /**
+   * Make a basic prefetch request to check permissions before running
+   * operations (filestack-js v4+).
+   * @param params - Prefetch options
+   */
+  prefetch(params: PrefetchOptions): Observable<PrefetchResponse> {
+    return from(this.client.prefetch(params));
+  }
+
+  /**
+   * Update the security object used by the client at runtime (filestack-js v4+).
+   * @param security - Filestack security object
+   */
+  setSecurity(security: Security): void {
+    this.client.setSecurity(security);
+  }
+
+  /**
+   * Update the CNAME used by the client at runtime (filestack-js v4+).
+   * @param cname - Custom domain name
+   */
+  setCname(cname: string): void {
+    this.client.setCname(cname);
   }
 
   /**
