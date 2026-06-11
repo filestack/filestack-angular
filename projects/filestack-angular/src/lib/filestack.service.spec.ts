@@ -1,11 +1,18 @@
+import { TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
+import { FILESTACK_CONFIG } from './filestack-config';
 import { FilestackService } from './filestack.service';
 
 describe('FilestackService', () => {
   const fsClientMock = {
     picker(_options: object) {
       return true;
+    },
+    multiupload(_files: string[], _options: object, _storeOptions: object, _token: string, _security: object) {
+      return new Promise((resolve) => {
+        resolve('Multiupload resolved');
+      });
     },
     transform(_url: string, _options: object, _isB64: boolean) {
       return true;
@@ -71,6 +78,7 @@ describe('FilestackService', () => {
     spyOn(fsClientMock, 'metadata').and.callThrough();
     spyOn(fsClientMock, 'storeURL').and.callThrough();
     spyOn(fsClientMock, 'upload').and.callThrough();
+    spyOn(fsClientMock, 'multiupload').and.callThrough();
     spyOn(fsClientMock, 'remove').and.callThrough();
     spyOn(fsClientMock, 'removeMetadata').and.callThrough();
     spyOn(fsClientMock, 'preview').and.callThrough();
@@ -157,6 +165,20 @@ describe('FilestackService', () => {
         done();
       });
     });
+    it('should route to client.multiupload when given an array of files', () => {
+      const files = [exampleFile, 'second.pdf'];
+      const result = service.upload(files, exampleOptions, exampleOptions, exampleToken, exampleSecurity);
+      expect(fsClientMock.multiupload).toHaveBeenCalledTimes(1);
+      expect(fsClientMock.multiupload).toHaveBeenCalledWith(files, exampleOptions, exampleOptions, exampleToken, exampleSecurity);
+      expect(fsClientMock.upload).not.toHaveBeenCalled();
+      expect(result).toEqual(jasmine.any(Observable));
+    });
+    it('should return observable resolving multiupload result for arrays', (done: DoneFn) => {
+      service.upload([exampleFile], exampleOptions, exampleOptions, exampleToken, exampleSecurity).subscribe(value => {
+        expect(value).toBe('Multiupload resolved');
+        done();
+      });
+    });
   });
 
   describe('remove method', () => {
@@ -209,6 +231,58 @@ describe('FilestackService', () => {
         expect(value).toBe('Logout resolved');
         done();
       });
+    });
+  });
+
+  describe('error paths', () => {
+    it('should propagate rejection from a promise-based client method', (done: DoneFn) => {
+      const failure = new Error('remove failed');
+      (fsClientMock.remove as jasmine.Spy).and.returnValue(Promise.reject(failure));
+
+      service.remove(exampleHandle, exampleSecurity).subscribe({
+        next: () => done.fail('expected the observable to error'),
+        error: (err) => {
+          expect(err).toBe(failure);
+          done();
+        }
+      });
+    });
+
+    it('should propagate rejection from multiupload routing', (done: DoneFn) => {
+      const failure = new Error('multiupload failed');
+      (fsClientMock.multiupload as jasmine.Spy).and.returnValue(Promise.reject(failure));
+
+      service.upload([exampleFile], exampleOptions).subscribe({
+        next: () => done.fail('expected the observable to error'),
+        error: (err) => {
+          expect(err).toBe(failure);
+          done();
+        }
+      });
+    });
+  });
+
+  describe('with TestBed and FILESTACK_CONFIG', () => {
+    it('should read apikey and options from the injected config', () => {
+      const config = { apikey: 'tb-key', options: { cname: 'cdn.example.com' } };
+      TestBed.configureTestingModule({
+        providers: [
+          FilestackService,
+          { provide: FILESTACK_CONFIG, useValue: config }
+        ]
+      });
+
+      const injected = TestBed.inject(FilestackService);
+
+      expect(injected).toBeTruthy();
+      expect((injected as any).apikey).toBe('tb-key');
+      expect((injected as any).clientOptions).toBe(config.options);
+    });
+
+    it('should be constructable without a config provider', () => {
+      TestBed.configureTestingModule({ providers: [FilestackService] });
+
+      expect(TestBed.inject(FilestackService)).toBeTruthy();
     });
   });
 });

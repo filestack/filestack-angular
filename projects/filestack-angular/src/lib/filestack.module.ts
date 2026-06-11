@@ -1,18 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { InjectionToken, NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { FilestackService } from './filestack.service';
 import { FilestackTransformPipe } from './filestack-transform.pipe';
 import { PickerOverlayComponent } from './picker/pickerOverlay.component';
 import { PickerInlineComponent } from './picker/pickerInline.component';
 import { PickerDropPaneComponent } from './picker/pickerDropPane.component';
-import { ClientOptions } from 'filestack-js';
+import { FILESTACK_CONFIG, InitialConfig } from './filestack-config';
 
-export type InitialConfig = {
-  apikey?: string,
-  options?: ClientOptions
-}
-
-export const FILESTACK_CONFIG = new InjectionToken<InitialConfig>('filestack.config');
+// Re-exported so existing consumers importing these from the module keep working.
+export { FILESTACK_CONFIG, InitialConfig } from './filestack-config';
 
 
 @NgModule({

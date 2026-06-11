@@ -1,4 +1,4 @@
-import { FILESTACK_CONFIG, InitialConfig } from './filestack.module';
+import { FILESTACK_CONFIG, InitialConfig } from './filestack-config';
 import { Injectable, Inject, Optional } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import {
