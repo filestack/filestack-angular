@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "FilestackAngularNgAdd",
+  "title": "Filestack Angular ng-add schematic",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project to add Filestack to.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "apikey": {
+      "type": "string",
+      "description": "Your Filestack API key (found in the Filestack developer portal).",
+      "x-prompt": "What is your Filestack API key?"
+    },
+    "addSample": {
+      "type": "boolean",
+      "default": false,
+      "description": "Add a sample Filestack picker usage snippet to the root component template.",
+      "x-prompt": "Add a sample <ng-picker-overlay> usage snippet to your root component?"
+    }
+  },
+  "required": []
+}
