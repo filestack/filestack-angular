@@ -1,0 +1,145 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>&#64;filestack/angular examples</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div fxLayout>
+  <mat-card>
+    <mat-card-title>
+      Install
+    </mat-card-title>
+    <mat-card-content>
+      <pre><code [highlight]="'npm i @filestack/angular filestack-js'" [language]="'html'"></code></pre>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>
+      Import
+    </mat-card-title>
+    <mat-card-content>
+      <pre><code [highlight]="exampleCodes.importCode" [language]="'typescript'"></code></pre>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div fxLayout>
+  <mat-card>
+    <mat-card-subtitle
+      >Example #1 - open picker by clicking the custom button & handle upload
+      Success</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card class="custom-card-padding">
+            <ng-picker-overlay
+              (uploadSuccess)="onUploadSuccess($event)"
+              (uploadError)="onUploadError($event)"
+            >
+              <button mat-raised-button color="primary">Open Picker</button>
+            </ng-picker-overlay>
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example1" [language]="'html'"></code></pre>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-subtitle
+      >Example #2 - open picker in inline mode</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card class="custom-card-padding">
+            <ng-picker-inline
+              [pickerOptions]="pickerOptions"
+              (uploadSuccess)="onUploadSuccess($event)"
+              (uploadError)="onUploadError($event)"
+            >
+            </ng-picker-inline>
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example2" [language]="'html'"></code></pre>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-subtitle
+      >Example #3 - open picker in dropPane mode</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card class="custom-card-padding">
+            <ng-picker-drop-pane
+              (uploadSuccess)="onUploadSuccess($event)"
+              (uploadError)="onUploadError($event)"
+            >
+            </ng-picker-drop-pane>
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example3" [language]="'html'"></code></pre>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-subtitle
+      >Example #4 - Generate img with filestack transform
+      pipe</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card class="custom-card-padding">
+            <img
+              class="example5img"
+              src="{{
+                '5aYkEQJSQCmYShsoCnZN' | filestackTransform: transformOptions
+              }}"
+            />
+          </mat-card>
+        </mat-tab>
+        <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example4" [language]="'html'"></code></pre>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-subtitle
+      >Example #5 - Select file and upload using sdk client.upload() (check
+      console for details)</mat-card-subtitle
+    >
+    <mat-card-content>
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0">
+        <mat-tab label="Example">
+          <mat-card>
+            <mat-card-content>
+              <input (change)="fileChanged($event)" type="file" matInput />
+            </mat-card-content>
+            <mat-card-actions class="example5-btn">
+              <button mat-raised-button color="primary" (click)="uploadFile()">
+                Upload file
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </mat-tab>
+        <!-- <mat-tab label="Code">
+          <pre><code [highlight]="exampleCodes.example1"></code></pre>
+        </mat-tab> -->
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>

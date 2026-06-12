@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/example-dist",
+    "baseUrl": "../../",
+    "paths": {
+      "@filestack/angular": ["dist/filestack-angular"],
+      "@filestack/angular/*": ["dist/filestack-angular/*"]
+    },
+    "types": []
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts",
+    "src/environments/environment.prod.ts"
+  ]
+}
