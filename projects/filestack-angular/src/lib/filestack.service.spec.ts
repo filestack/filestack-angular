@@ -50,7 +50,12 @@ describe('FilestackService', () => {
     setCname(_cname: string) {
       return true;
     },
-    upload(_file: string, _options: object, _storeOptions: object, _token: string, _security: object) {
+    upload(_file: string, _options: any, _storeOptions: object, _token: string, _security: object) {
+      // Drive progress callbacks when uploadWithProgress passes onProgress.
+      if (_options && _options.onProgress) {
+        _options.onProgress({ totalBytes: 50, totalPercent: 50 });
+        _options.onProgress({ totalBytes: 100, totalPercent: 100 });
+      }
       return new Promise((resolve) => {
         resolve('Upload resolved');
       });
@@ -124,6 +129,19 @@ describe('FilestackService', () => {
       service.picker(exampleOptions);
       expect(fsClientMock.picker).toHaveBeenCalledTimes(1);
       expect(fsClientMock.picker).toHaveBeenCalledWith(exampleOptions);
+    });
+  });
+
+  describe('openPicker method (lazy)', () => {
+    it('should open a picker on the existing client and resolve with it', async () => {
+      const mockPicker = { open: jasmine.createSpy('open').and.returnValue(Promise.resolve()), close: () => undefined };
+      (fsClientMock.picker as jasmine.Spy).and.returnValue(mockPicker);
+
+      const result = await service.openPicker(exampleOptions);
+
+      expect(fsClientMock.picker).toHaveBeenCalledWith(exampleOptions);
+      expect(mockPicker.open).toHaveBeenCalledTimes(1);
+      expect(result).toBe(mockPicker);
     });
   });
 
@@ -265,6 +283,43 @@ describe('FilestackService', () => {
         expect(value).toBe('Multiupload resolved');
         done();
       });
+    });
+  });
+
+  describe('uploadWithProgress method', () => {
+    it('should emit progress ticks then a complete event with the result', (done: DoneFn) => {
+      const events: any[] = [];
+      service.uploadWithProgress(exampleFile, {}).subscribe({
+        next: (p) => events.push(p),
+        complete: () => {
+          expect(fsClientMock.upload).toHaveBeenCalledTimes(1);
+          expect(events.length).toBe(3);
+          expect(events[0]).toEqual(jasmine.objectContaining({ status: 'progress', totalPercent: 50, totalBytes: 50 }));
+          expect(events[1]).toEqual(jasmine.objectContaining({ status: 'progress', totalPercent: 100 }));
+          expect(events[2]).toEqual(jasmine.objectContaining({ status: 'complete', totalPercent: 100, file: 'Upload resolved' }));
+          done();
+        }
+      });
+    });
+
+    it('should emit an error event and error the observable on failure', (done: DoneFn) => {
+      const failure = new Error('upload failed');
+      (fsClientMock.upload as jasmine.Spy).and.returnValue(Promise.reject(failure));
+      const events: any[] = [];
+      service.uploadWithProgress(exampleFile, {}).subscribe({
+        next: (p) => events.push(p),
+        error: (err) => {
+          expect(err).toBe(failure);
+          expect(events.some(e => e.status === 'error' && e.error === failure)).toBeTrue();
+          done();
+        }
+      });
+    });
+  });
+
+  describe('getClientInstance method', () => {
+    it('should return the underlying client instance', () => {
+      expect(service.getClientInstance()).toBe(fsClientMock);
     });
   });
 

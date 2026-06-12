@@ -10,8 +10,8 @@
       ],
       "parserOptions": {
         "project": [
-          "./projects/example/tsconfig.app.json",
-          "./projects/example/tsconfig.spec.json"
+          "./projects/example-dist/tsconfig.app.json",
+          "./projects/example-dist/tsconfig.spec.json"
         ],
         "createDefaultProgram": true
       },

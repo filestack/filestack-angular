@@ -76,6 +76,32 @@ The library is SSR-safe (Angular Universal). Because the Filestack picker and
 No extra configuration is required — just render as usual; the components produce no
 errors during server rendering.
 
+## Lazy picker loading
+If your app doesn't show the picker immediately, use `FilestackService.openPicker()` to
+load filestack-js on demand via a dynamic `import()`, keeping the SDK out of the initial
+bundle (it loads in a separate chunk the first time the picker is opened):
+
+```typescript
+async showPicker() {
+  // filestack-js is fetched only when this runs
+  const picker = await this.filestackService.openPicker({ /* PickerOptions */ });
+}
+```
+
+Returns the opened `PickerInstance` (or `null` on the server). For the bundle benefit to
+materialize, reach for `openPicker()` instead of eagerly calling synchronous client
+methods on the critical path.
+
+## Zoneless change detection
+The SDK supports Angular's zoneless change detection (`provideZonelessChangeDetection()`):
+
+- Component state (e.g. the overlay's open/closed flag) is **signal-based**, so changes
+  schedule change detection without zone.js.
+- It never uses `NgZone.run()` or relies on zone.js patching.
+- Outputs (`uploadSuccess` / `uploadError`) use the signal `output()` API.
+
+No changes are needed on your side — it works the same with or without zone.js.
+
 ## Usage
 ### Installation
 Install it through NPM

@@ -16,6 +16,7 @@ import {
   PreviewOptions,
   ClientOptions,
   Client,
+  FilestackError,
   PrefetchOptions,
   PrefetchResponse,
   UploadTags,
@@ -30,6 +31,21 @@ import {
  * to expose a named, stable type to consumers (works on both v3 and v4).
  */
 export type FsResponse = Awaited<ReturnType<Client['download']>>;
+
+/**
+ * Emitted by {@link FilestackService.uploadWithProgress} as an upload advances.
+ *
+ * - `progress` — an intermediate progress tick (`totalPercent` / `totalBytes`)
+ * - `complete` — the upload finished successfully; `file` holds the result
+ * - `error` — the upload failed; `error` holds the FilestackError
+ */
+export interface UploadProgress {
+  status: 'progress' | 'complete' | 'error';
+  totalBytes: number;
+  totalPercent: number;
+  file?: object;
+  error?: FilestackError;
+}
 
 
 @Injectable()
@@ -77,6 +93,14 @@ export class FilestackService {
   }
 
   /**
+   * Returns the underlying filestack-js client instance (lazily initialized).
+   * Useful for accessing client internals such as the active session/apikey.
+   */
+  getClientInstance(): Client {
+    return this.client;
+  }
+
+  /**
    * Initialize filestack client
    * @param apikey - Filestack apikey
    * @param clientOptions - Client options
@@ -93,6 +117,28 @@ export class FilestackService {
    */
   picker(options?: PickerOptions): PickerInstance {
     return this.client.picker(options);
+  }
+
+  /**
+   * Lazily load filestack-js and open a picker on demand.
+   *
+   * Uses a dynamic `import('filestack-js')` so apps that don't immediately show
+   * the picker can keep the SDK out of their initial bundle (it loads in a
+   * separate chunk the first time `openPicker` is called). Returns the opened
+   * `PickerInstance`, or `null` when running on the server (SSR).
+   * @param options - picker options
+   */
+  async openPicker(options?: PickerOptions): Promise<PickerInstance | null> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+
+    const filestack = await import('filestack-js');
+    const client = this.clientInstance ?? (this.client = filestack.init(this.apikey, this.clientOptions));
+    const picker = client.picker(options);
+    await picker.open();
+
+    return picker;
   }
 
   /**
@@ -218,6 +264,61 @@ export class FilestackService {
     }
 
     return from(this.client.upload(file, options, storeOptions, token, security));
+  }
+
+  /**
+   * Upload a single file while emitting progress updates.
+   *
+   * Emits `{ status: 'progress' }` ticks as the upload advances (driven by
+   * filestack-js' `onProgress`), then a final `{ status: 'complete', file }`
+   * before completing. On failure it emits `{ status: 'error', error }` and
+   * errors the observable.
+   * @param file - A file to upload
+   * @param options - Upload options
+   * @param storeOptions - Store options
+   * @param security - Filestack security object
+   */
+  uploadWithProgress(
+    file: InputFile,
+    options?: UploadOptions,
+    storeOptions?: StoreUploadOptions,
+    security?: Security
+  ): Observable<UploadProgress> {
+    return new Observable<UploadProgress>((subscriber) => {
+      let lastBytes = 0;
+
+      const uploadOptions: UploadOptions = {
+        ...options,
+        onProgress: (evt) => {
+          lastBytes = evt.totalBytes;
+          subscriber.next({
+            status: 'progress',
+            totalBytes: evt.totalBytes,
+            totalPercent: evt.totalPercent
+          });
+        }
+      };
+
+      this.client.upload(file, uploadOptions, storeOptions, undefined, security)
+        .then((result) => {
+          subscriber.next({
+            status: 'complete',
+            totalBytes: lastBytes,
+            totalPercent: 100,
+            file: result
+          });
+          subscriber.complete();
+        })
+        .catch((error) => {
+          subscriber.next({
+            status: 'error',
+            totalBytes: lastBytes,
+            totalPercent: 0,
+            error
+          });
+          subscriber.error(error);
+        });
+    });
   }
 
   /**

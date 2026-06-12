@@ -3,6 +3,7 @@
  */
 
 export * from './lib/filestack.service';
+export * from './lib/filestack-filelink.service';
 export * from './lib/picker/pickerOverlay.component';
 export * from './lib/picker/pickerDropPane.component';
 export * from './lib/picker/pickerInline.component';

@@ -64,4 +64,17 @@ describe('SSR (server platform)', () => {
     const service = TestBed.inject(FilestackService);
     expect(service.preview('handle')).toBeNull();
   });
+
+  it('FilestackService.openPicker() should resolve to null on the server', async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        FilestackService,
+        { provide: FILESTACK_CONFIG, useValue: { apikey: 'ssr-key' } },
+        { provide: PLATFORM_ID, useValue: 'server' }
+      ]
+    });
+
+    const service = TestBed.inject(FilestackService);
+    await expectAsync(service.openPicker()).toBeResolvedTo(null);
+  });
 });

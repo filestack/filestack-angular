@@ -61,7 +61,7 @@ describe('PickerOverlayComponent', () => {
 
     component.onClick(event);
 
-    expect(component.isActive).toBeTrue();
+    expect(component.isActive()).toBeTrue();
     expect(event.stopPropagation).toHaveBeenCalled();
     expect(event.preventDefault).toHaveBeenCalled();
     expect(mockPicker.open).toHaveBeenCalledTimes(1);
@@ -69,7 +69,7 @@ describe('PickerOverlayComponent', () => {
 
   it('should ignore clicks while already active', () => {
     fixture.detectChanges();
-    component.isActive = true;
+    component.isActive.set(true);
     const event = clickEvent();
 
     component.onClick(event);
@@ -89,18 +89,16 @@ describe('PickerOverlayComponent', () => {
     expect(successSpy).toHaveBeenCalledWith(response);
   });
 
-  it('should reset state and trigger OnPush change detection on close', () => {
+  it('should reset state via signal and regenerate the id on close', () => {
     fixture.detectChanges();
-    const cdr = (component as any).cdr;
-    spyOn(cdr, 'markForCheck');
     spyOn(component, 'generateId');
-    component.isActive = true;
+    component.isActive.set(true);
 
     capturedOptions.onClose();
 
-    expect(component.isActive).toBeFalse();
+    // Signal write drives change detection (no markForCheck needed; zoneless-ready).
+    expect(component.isActive()).toBeFalse();
     expect(component.generateId).toHaveBeenCalledTimes(1);
-    expect(cdr.markForCheck).toHaveBeenCalledTimes(1);
   });
 
   it('should emit uploadError when picker.open rejects', (done: DoneFn) => {
