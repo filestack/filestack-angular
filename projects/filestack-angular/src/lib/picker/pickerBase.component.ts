@@ -20,7 +20,9 @@ import {
 
 import { FilestackService } from '../filestack.service';
 
-@Directive({})
+@Directive({
+  standalone: true
+})
 export abstract class PickerBaseDirective implements OnInit {
 
   public elementId = 'picker-container';
