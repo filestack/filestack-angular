@@ -2,7 +2,8 @@
   "extends": "../../.eslintrc.json",
   "ignorePatterns": [
     "!**/*",
-    "schematics/**"
+    "schematics/**",
+    "**/*.stories.ts"
   ],
   "overrides": [
     {
