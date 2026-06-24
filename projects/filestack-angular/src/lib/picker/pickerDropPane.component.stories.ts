@@ -5,7 +5,8 @@ import { provideFilestack } from '../provide-filestack';
 import { PickerDropPaneComponent } from './pickerDropPane.component';
 
 // Real Filestack apikey so the drop-pane picker actually loads in Storybook.
-const APIKEY = 'AChYFTnwRzuITHHX95rDmz';
+// Loaded from the STORYBOOK_FILESTACK_APIKEY env var (see .env).
+const APIKEY = process.env['STORYBOOK_FILESTACK_APIKEY'] ?? '';
 
 const meta: Meta<PickerDropPaneComponent> = {
   title: 'Filestack/PickerDropPane',
