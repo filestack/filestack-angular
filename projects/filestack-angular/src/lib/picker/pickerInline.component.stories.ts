@@ -3,10 +3,10 @@ import { applicationConfig } from '@storybook/angular';
 
 import { provideFilestack } from '../provide-filestack';
 import { PickerInlineComponent } from './pickerInline.component';
+import { STORYBOOK_FILESTACK_APIKEY } from '../../../../../.storybook/storybook.config';
 
 // Real Filestack apikey so the inline picker actually loads in Storybook.
-// Loaded from the STORYBOOK_FILESTACK_APIKEY env var (see .env).
-const APIKEY = process.env['STORYBOOK_FILESTACK_APIKEY'] ?? '';
+const APIKEY = STORYBOOK_FILESTACK_APIKEY;
 
 const meta: Meta<PickerInlineComponent> = {
   title: 'Filestack/PickerInline',
