@@ -1,12 +1,13 @@
-import { Component,  OnInit} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FilestackService } from './../../../filestack-angular/src/public-api';
 import { InputFile, TransformOptions, PickerOptions } from 'filestack-js';
 import { Code } from './examples';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
   action: string;
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit {
 
   exampleCodes = Code;
 
-  constructor(private filestackService: FilestackService) {}
+  private filestackService = inject(FilestackService);
 
   ngOnInit() {
       this.pickerOptions = {
@@ -59,6 +60,12 @@ export class AppComponent implements OnInit {
   uploadFile() {
     this.filestackService.upload(this.file)
       .subscribe(value => console.log(value));
+  }
+
+  // filestack-js v4: download a file by handle (recommended over the deprecated retrieve())
+  downloadFile(handle: string) {
+    this.filestackService.download(handle)
+      .subscribe(response => console.log('### download', response));
   }
 
   onUploadSuccess(res: object) {

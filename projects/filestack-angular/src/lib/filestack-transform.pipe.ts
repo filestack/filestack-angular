@@ -1,14 +1,15 @@
 import {
   Pipe,
-  PipeTransform
+  PipeTransform,
+  inject
 } from '@angular/core';
 import { FilestackService } from './filestack.service';
 import { TransformOptions } from 'filestack-js';
 
-@Pipe({name: 'filestackTransform'})
+@Pipe({ name: 'filestackTransform', standalone: true })
 export class FilestackTransformPipe implements PipeTransform {
 
-  constructor(private filestackService: FilestackService) {}
+  private filestackService = inject(FilestackService);
 
   transform(value: string, transformOptions?: TransformOptions): string {
     return this.filestackService.transform(value, transformOptions);

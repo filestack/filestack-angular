@@ -1,7 +1,7 @@
 import typescript from "@rollup/plugin-typescript";
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import path from "path";
 
 const pkg = require("./package.json");
@@ -19,7 +19,13 @@ export default {
     sourcemap: true,
   },
   plugins: [
-    typescript(),
+    typescript({
+      // Rollup 4 / @rollup/plugin-typescript v12 require outDir to live under
+      // the bundle output directory.
+      outDir: path.join(__dirname, "dist/filestack-angular/bundles"),
+      declaration: false,
+      sourceMap: true,
+    }),
     commonjs(),
     nodeResolve({ browser: true }),
     terser({

@@ -2,7 +2,8 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css"; 
 @import '~highlight.js/styles/monokai-sublime.css';
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 $light-theme: mat.define-theme((
   color: (

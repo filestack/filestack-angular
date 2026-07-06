@@ -52,11 +52,61 @@ This repository a contains angular workspace with two projects:
 - **PickerDropPaneComponent** - Filestack drop pane component that will open in a provided html container
 which can be also used independently if needed
 
+## Compatibility
+`@filestack/angular` **v5** requires **Angular 19 or 20** (`@angular/core` / `@angular/common`
+`^19.0.0 || ^20.0.0`) and Node 20.19+/22.12+. For Angular 18 use `@filestack/angular` v3.x.
+
+It works with **both filestack-js v3 (`>=3.47.4`) and v4**. The v4 client methods
+(`download`, `prefetch`, `setSecurity`, `setCname`, and the extra `storeURL` params) are
+exposed by the service but require filestack-js v4 at runtime.
+
+## Server-Side Rendering (SSR)
+The library is SSR-safe (Angular Universal). Because the Filestack picker and
+`preview()` need the browser DOM, they are guarded by `isPlatformBrowser`:
+
+- The picker components (`ng-picker-overlay`, `ng-picker-inline`, `ng-picker-drop-pane`)
+  render their container element on the server but **do not** initialize or open the
+  picker — that happens only in the browser, after hydration.
+- `FilestackService.preview()` returns **`null`** on the server (its return type is
+  `HTMLIFrameElement | Window | null`); guard for `null` in your code.
+- `FilestackService.init()` is safe to call on the server (it only constructs the
+  filestack-js client and does not touch the DOM). DOM-dependent methods such as
+  `picker()` and `preview()` should still only be called in the browser.
+
+No extra configuration is required — just render as usual; the components produce no
+errors during server rendering.
+
+## Lazy picker loading
+If your app doesn't show the picker immediately, use `FilestackService.openPicker()` to
+load filestack-js on demand via a dynamic `import()`, keeping the SDK out of the initial
+bundle (it loads in a separate chunk the first time the picker is opened):
+
+```typescript
+async showPicker() {
+  // filestack-js is fetched only when this runs
+  const picker = await this.filestackService.openPicker({ /* PickerOptions */ });
+}
+```
+
+Returns the opened `PickerInstance` (or `null` on the server). For the bundle benefit to
+materialize, reach for `openPicker()` instead of eagerly calling synchronous client
+methods on the critical path.
+
+## Zoneless change detection
+The SDK supports Angular's zoneless change detection (`provideZonelessChangeDetection()`):
+
+- Component state (e.g. the overlay's open/closed flag) is **signal-based**, so changes
+  schedule change detection without zone.js.
+- It never uses `NgZone.run()` or relies on zone.js patching.
+- Outputs (`uploadSuccess` / `uploadError`) use the signal `output()` API.
+
+No changes are needed on your side — it works the same with or without zone.js.
+
 ## Usage
 ### Installation
 Install it through NPM
 ```bash
-npm install filestack-js
+npm install filestack-js   # v3 (>=3.47.4) or v4
 npm install @filestack/angular
 ```
 Include ```FilestackModule``` in ```app.module.ts```
@@ -121,14 +171,18 @@ Methods get the same input params as client class method.
 | init              | void                                                                                      | Init filestack client with your apikey                                        |
 | picker            | [PickerInstance](https://filestack.github.io/filestack-js/interfaces/pickerinstance.html)   | Open or close picker instance                                                |
 | transform         | string                                                                                    | Create a transformation url                                                  |
-| retrieve          | Observable                                                                                | Retrieve an info about a filestack handle                                     |
+| retrieve          | Observable                                                                                | **Deprecated** (filestack-js v4) — use `download` or `metadata` instead       |
+| download          | Observable                                                                                | Download a file by its Filestack handle (filestack-js v4+)                     |
 | metadata          | Observable                                                                                | Access files via their Filestack handles                                      |
-| storeURL          | Observable                                                                                | Get info about a filestack handle metadata                                    |
-| upload            | Observable                                                                                | Upload a file to the Filestack                                                |
+| storeURL          | Observable                                                                                | Store a file from a URL (supports v4 `uploadTags`/`headers`/`workflowIds`)     |
+| upload            | Observable                                                                                | Upload a file (or array of files via `multiupload`) to Filestack              |
+| prefetch          | Observable                                                                                | Check permissions before running operations (filestack-js v4+)                |
 | remove            | Observable                                                                                | Remove a file from the Filestack                                              |
 | removeMetadata    | Observable                                                                                | Remove a file only from the Filestack system. The file remains in storage.     |
-| preview           | HTMLIFrameElement | Window                                                                | Get preview of uploaded file (need additional addon in your Filestack account)|
+| preview           | HTMLIFrameElement | Window | null                                                         | Get preview of uploaded file (returns `null` on the server/SSR; needs a preview addon)|
 | logout            | Observable                                                                                | Clear cloud session from picker procviders                                   |
+| setSecurity       | void                                                                                      | Update the client security object at runtime (filestack-js v4+)               |
+| setCname          | void                                                                                      | Update the client CNAME at runtime (filestack-js v4+)                          |
 | setClientInstance | [ClientInstance](https://filestack.github.io/filestack-js/classes/client.html)              | Put an existing client instance into filestack service                        |
 
 ### Examples

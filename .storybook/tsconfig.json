@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "lib": ["es2022", "dom"],
+    "types": ["node"]
+  },
+  "include": [
+    "*.ts",
+    "../projects/filestack-angular/src/**/*.ts",
+    "../projects/example/src/**/*.ts"
+  ],
+  "exclude": [
+    "../projects/**/*.spec.ts"
+  ]
+}

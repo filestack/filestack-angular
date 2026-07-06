@@ -1,5 +1,6 @@
-import { InitialConfig } from './filestack.module';
-import { Injectable, Inject, Optional } from '@angular/core';
+import { FILESTACK_CONFIG } from './filestack-config';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { from, Observable } from 'rxjs';
 import {
   PickerOptions,
@@ -15,8 +16,36 @@ import {
   PreviewOptions,
   ClientOptions,
   Client,
+  FilestackError,
+  PrefetchOptions,
+  PrefetchResponse,
+  UploadTags,
   init,
 } from 'filestack-js';
+
+/**
+ * Response returned by {@link FilestackService.download}.
+ *
+ * filestack-js declares `FsResponse` internally but does not re-export it from
+ * its public entrypoint, so we derive it from the client's `download` signature
+ * to expose a named, stable type to consumers (works on both v3 and v4).
+ */
+export type FsResponse = Awaited<ReturnType<Client['download']>>;
+
+/**
+ * Emitted by {@link FilestackService.uploadWithProgress} as an upload advances.
+ *
+ * - `progress` — an intermediate progress tick (`totalPercent` / `totalBytes`)
+ * - `complete` — the upload finished successfully; `file` holds the result
+ * - `error` — the upload failed; `error` holds the FilestackError
+ */
+export interface UploadProgress {
+  status: 'progress' | 'complete' | 'error';
+  totalBytes: number;
+  totalPercent: number;
+  file?: object;
+  error?: FilestackError;
+}
 
 
 @Injectable()
@@ -28,13 +57,17 @@ export class FilestackService {
 
   private apikey: string;
 
-  constructor(@Optional() @Inject('config') private config?: InitialConfig) {
-    if (!config) {
+  private config = inject(FILESTACK_CONFIG, { optional: true });
+
+  private platformId = inject(PLATFORM_ID);
+
+  constructor() {
+    if (!this.config) {
       return;
     }
 
-    this.clientOptions = config.options;
-    this.apikey = config.apikey;
+    this.clientOptions = this.config.options;
+    this.apikey = this.config.apikey;
   }
 
   private get client(): Client {
@@ -60,6 +93,14 @@ export class FilestackService {
   }
 
   /**
+   * Returns the underlying filestack-js client instance (lazily initialized).
+   * Useful for accessing client internals such as the active session/apikey.
+   */
+  getClientInstance(): Client {
+    return this.client;
+  }
+
+  /**
    * Initialize filestack client
    * @param apikey - Filestack apikey
    * @param clientOptions - Client options
@@ -76,6 +117,28 @@ export class FilestackService {
    */
   picker(options?: PickerOptions): PickerInstance {
     return this.client.picker(options);
+  }
+
+  /**
+   * Lazily load filestack-js and open a picker on demand.
+   *
+   * Uses a dynamic `import('filestack-js')` so apps that don't immediately show
+   * the picker can keep the SDK out of their initial bundle (it loads in a
+   * separate chunk the first time `openPicker` is called). Returns the opened
+   * `PickerInstance`, or `null` when running on the server (SSR).
+   * @param options - picker options
+   */
+  async openPicker(options?: PickerOptions): Promise<PickerInstance | null> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+
+    const filestack = await import('filestack-js');
+    const client = this.clientInstance ?? (this.client = filestack.init(this.apikey, this.clientOptions));
+    const picker = client.picker(options);
+    await picker.open();
+
+    return picker;
   }
 
   /**
@@ -97,6 +160,9 @@ export class FilestackService {
    * @param handle - Filestack handle
    * @param options - Retrieve options
    * @param security - Filestack security object
+   * @deprecated Since filestack-js v4. Use {@link FilestackService.download}
+   * (to fetch file contents) or {@link FilestackService.metadata} (for file
+   * details) instead. `retrieve()` will be removed in a future major release.
    */
   retrieve(
     handle: string,
@@ -126,14 +192,56 @@ export class FilestackService {
    * @param options - Store params
    * @param token - Optional control token to call .cancel()
    * @param security - Filestack security object
+   * @param uploadTags - Optional key/value tags to attach to the stored file (filestack-js v4+)
+   * @param headers - Optional request headers to send with the store request (filestack-js v4+)
+   * @param workflowIds - Optional Filestack Workflow ids to trigger after storing (filestack-js v4+)
    */
   storeURL(
     url: string,
     options?: StoreParams,
     token?: string,
-    security?: Security
+    security?: Security,
+    uploadTags?: UploadTags,
+    headers?: { [key: string]: string },
+    workflowIds?: string[]
   ): Observable<object> {
-    return from(this.client.storeURL(url, options, token, security));
+    return from(this.client.storeURL(url, options, token, security, uploadTags, headers, workflowIds));
+  }
+
+  /**
+   * Download a file via its Filestack handle (filestack-js v4+).
+   *
+   * Recommended replacement for the deprecated {@link FilestackService.retrieve}.
+   * @param handle - Filestack handle
+   * @param security - Filestack security object
+   */
+  download(handle: string, security?: Security): Observable<FsResponse> {
+    return from(this.client.download(handle, security));
+  }
+
+  /**
+   * Make a basic prefetch request to check permissions before running
+   * operations (filestack-js v4+).
+   * @param params - Prefetch options
+   */
+  prefetch(params: PrefetchOptions): Observable<PrefetchResponse> {
+    return from(this.client.prefetch(params));
+  }
+
+  /**
+   * Update the security object used by the client at runtime (filestack-js v4+).
+   * @param security - Filestack security object
+   */
+  setSecurity(security: Security): void {
+    this.client.setSecurity(security);
+  }
+
+  /**
+   * Update the CNAME used by the client at runtime (filestack-js v4+).
+   * @param cname - Custom domain name
+   */
+  setCname(cname: string): void {
+    this.client.setCname(cname);
   }
 
   /**
@@ -159,6 +267,61 @@ export class FilestackService {
   }
 
   /**
+   * Upload a single file while emitting progress updates.
+   *
+   * Emits `{ status: 'progress' }` ticks as the upload advances (driven by
+   * filestack-js' `onProgress`), then a final `{ status: 'complete', file }`
+   * before completing. On failure it emits `{ status: 'error', error }` and
+   * errors the observable.
+   * @param file - A file to upload
+   * @param options - Upload options
+   * @param storeOptions - Store options
+   * @param security - Filestack security object
+   */
+  uploadWithProgress(
+    file: InputFile,
+    options?: UploadOptions,
+    storeOptions?: StoreUploadOptions,
+    security?: Security
+  ): Observable<UploadProgress> {
+    return new Observable<UploadProgress>((subscriber) => {
+      let lastBytes = 0;
+
+      const uploadOptions: UploadOptions = {
+        ...options,
+        onProgress: (evt) => {
+          lastBytes = evt.totalBytes;
+          subscriber.next({
+            status: 'progress',
+            totalBytes: evt.totalBytes,
+            totalPercent: evt.totalPercent
+          });
+        }
+      };
+
+      this.client.upload(file, uploadOptions, storeOptions, undefined, security)
+        .then((result) => {
+          subscriber.next({
+            status: 'complete',
+            totalBytes: lastBytes,
+            totalPercent: 100,
+            file: result
+          });
+          subscriber.complete();
+        })
+        .catch((error) => {
+          subscriber.next({
+            status: 'error',
+            totalBytes: lastBytes,
+            totalPercent: 0,
+            error
+          });
+          subscriber.error(error);
+        });
+    });
+  }
+
+  /**
    * Remove a file from storage and the Filestack system
    * @param handle - Filestack handle
    * @param security - Filestack security object
@@ -177,14 +340,21 @@ export class FilestackService {
   }
 
   /**
-   * Used for viewing files via Filestack handles or storage aliases
+   * Used for viewing files via Filestack handles or storage aliases.
+   *
+   * Returns `null` when running on the server (SSR), since preview renders into
+   * the DOM and has no meaning outside the browser.
    * @param handle - Filestack handle
    * @param options - Preview options
    */
   preview(
     handle: string,
     options?: PreviewOptions
-  ): HTMLIFrameElement | Window {
+  ): HTMLIFrameElement | Window | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+
     return this.client.preview(handle, options);
   }
 
