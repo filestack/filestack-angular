@@ -23,7 +23,7 @@
     "publish:umd": "npm run build:umd && npm run publishS3"
   },
   "dependencies": {
-    "@angular/animations": "^20.1.8",
+    "@angular/animations": "^20.3.25",
     "@angular/cdk": "^20.2.14",
     "@angular/common": "^20.3.25",
     "@angular/compiler": "^20.3.25",
