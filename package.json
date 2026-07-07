@@ -1,6 +1,6 @@
 {
   "name": "@filestack/angular",
-  "version": "3.0.0",
+  "version": "4.0.0-beta.1",
   "description": "Angular module for filestack-js",
   "engines": {
     "node": ">=22.22.3"
