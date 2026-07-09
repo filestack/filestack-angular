@@ -56,9 +56,11 @@ which can be also used independently if needed
 `@filestack/angular` **v5** requires **Angular 19 or newer** (`@angular/core` / `@angular/common`
 `>=19.0.0`) and Node 20.19+/22.12+. For Angular 18 use `@filestack/angular` v3.x.
 
-It works with **both filestack-js v3 (`>=3.47.4`) and v4**. The v4 client methods
-(`download`, `prefetch`, `setSecurity`, `setCname`, and the extra `storeURL` params) are
-exposed by the service but require filestack-js v4 at runtime.
+**filestack-js v4** (`^4.0.0`) is installed automatically as a dependency. The v4 client
+methods (`download`, `prefetch`, `setSecurity`, `setCname`, and the extra `storeURL`
+params) are exposed by the service and work out of the box. The wrapper is still
+source-compatible with filestack-js v3 (`>=3.47.4`) if you deliberately override the
+installed version, but those v4-only methods will be unavailable at runtime on v3.
 
 ## Server-Side Rendering (SSR)
 The library is SSR-safe (Angular Universal). Because the Filestack picker and
@@ -106,8 +108,7 @@ No changes are needed on your side — it works the same with or without zone.js
 ### Installation
 Install it through NPM
 ```bash
-npm install filestack-js   # v3 (>=3.47.4) or v4
-npm install @filestack/angular
+npm install @filestack/angular   # filestack-js is installed automatically
 ```
 Include ```FilestackModule``` in ```app.module.ts```
 ```javascript
