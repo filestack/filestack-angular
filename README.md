@@ -53,8 +53,8 @@ This repository a contains angular workspace with two projects:
 which can be also used independently if needed
 
 ## Compatibility
-`@filestack/angular` **v5** requires **Angular 19 or 20** (`@angular/core` / `@angular/common`
-`^19.0.0 || ^20.0.0`) and Node 20.19+/22.12+. For Angular 18 use `@filestack/angular` v3.x.
+`@filestack/angular` **v5** requires **Angular 19 or newer** (`@angular/core` / `@angular/common`
+`>=19.0.0`) and Node 20.19+/22.12+. For Angular 18 use `@filestack/angular` v3.x.
 
 It works with **both filestack-js v3 (`>=3.47.4`) and v4**. The v4 client methods
 (`download`, `prefetch`, `setSecurity`, `setCname`, and the extra `storeURL` params) are
