@@ -166,6 +166,76 @@
           }
         }
       }
+    },
+    "example-standalone": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/example-standalone",
+      "sourceRoot": "projects/example-standalone/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/example-standalone",
+            "index": "projects/example-standalone/src/index.html",
+            "main": "projects/example-standalone/src/main.ts",
+            "polyfills": "projects/example-standalone/src/polyfills.ts",
+            "tsConfig": "projects/example-standalone/tsconfig.app.json",
+            "aot": true,
+            "styles": [
+              "projects/example-standalone/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "buildTarget": "example-standalone:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "example-standalone:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/example-standalone/**/*.ts",
+              "projects/example-standalone/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -1,0 +1,18 @@
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+/*
+ * The filestack picker (.fsp-picker) is injected into the DOM by filestack-js,
+ * outside Angular's component style encapsulation, so it must be styled here.
+ * Give the inline picker's container (the .fsp-picker parent) a visible height.
+ */
+ng-picker-inline .ng-picker {
+  height: 500px;
+}

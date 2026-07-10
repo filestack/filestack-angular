@@ -1,0 +1,40 @@
+<header>
+  <h1>&#64;filestack/angular — standalone example</h1>
+  <p>Bootstrapped with <code>bootstrapApplication()</code> + <code>provideFilestack()</code>. Open the console to see upload events.</p>
+</header>
+
+<main>
+  <section>
+    <h2>Overlay picker</h2>
+    <p><code>&lt;ng-picker-overlay&gt;</code> — opens the picker in an overlay when the projected button is clicked.</p>
+    <ng-picker-overlay
+      [pickerOptions]="pickerOptions"
+      (uploadSuccess)="onUploadSuccess($event)"
+      (uploadError)="onUploadError($event)"
+    >
+      <button type="button">Open picker (overlay)</button>
+    </ng-picker-overlay>
+  </section>
+
+  <section>
+    <h2>Inline picker</h2>
+    <p><code>&lt;ng-picker-inline&gt;</code> — renders the picker inline in its own container.</p>
+    <ng-picker-inline
+      [pickerOptions]="pickerOptions"
+      (uploadSuccess)="onUploadSuccess($event)"
+      (uploadError)="onUploadError($event)"
+    >
+    </ng-picker-inline>
+  </section>
+
+  <section>
+    <h2>Drop pane picker</h2>
+    <p><code>&lt;ng-picker-drop-pane&gt;</code> — drag &amp; drop files into the pane below.</p>
+    <ng-picker-drop-pane
+      [pickerOptions]="pickerOptions"
+      (uploadSuccess)="onUploadSuccess($event)"
+      (uploadError)="onUploadError($event)"
+    >
+    </ng-picker-drop-pane>
+  </section>
+</main>
