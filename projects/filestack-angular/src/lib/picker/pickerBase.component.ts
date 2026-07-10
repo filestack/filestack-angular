@@ -20,6 +20,12 @@ import {
 
 import { FilestackService } from '../filestack.service';
 
+// Monotonic counter guaranteeing unique picker DOM ids per instance.
+// A timestamp alone (Date.now()) collides when several pickers are created in
+// the same tick, making them share one id — so document.getElementById resolves
+// them all to the first element and the rest render nothing.
+let pickerInstanceCounter = 0;
+
 @Directive({
   standalone: true
 })
@@ -56,6 +62,15 @@ export abstract class PickerBaseDirective implements OnInit {
   }
 
   generateId() {
-    this.elementId = `picker-container-${Date.now()}`;
+    this.elementId = this.uniqueId('picker-container');
+  }
+
+  /**
+   * Build a DOM id that is unique across every picker instance on the page,
+   * even ones created within the same millisecond. Used for both the container
+   * element id and the picker's `rootId`.
+   */
+  protected uniqueId(prefix: string): string {
+    return `${prefix}-${Date.now()}-${pickerInstanceCounter++}`;
   }
 }

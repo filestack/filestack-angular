@@ -31,7 +31,7 @@ export class PickerOverlayComponent extends PickerBaseDirective implements After
     // Overwrite display mode to be always 'overlay' in this component
     this.picker = this.filestackService.picker({
       ...this.pickerOptions(),
-      rootId: `picker-overlay-${Date.now()}`,
+      rootId: this.uniqueId('picker-overlay'),
       container: this.elementId,
       displayMode: PickerDisplayMode.overlay,
       onUploadDone: res => this.uploadSuccess.emit(res),

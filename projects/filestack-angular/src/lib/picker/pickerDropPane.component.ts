@@ -25,7 +25,7 @@ export class PickerDropPaneComponent extends PickerBaseDirective implements Afte
     // Overwrite display mode to be always 'dropPane' in this component
     this.picker = this.filestackService.picker({
       ...this.pickerOptions(),
-      rootId: `picker-drop-pane-${Date.now()}`,
+      rootId: this.uniqueId('picker-drop-pane'),
       displayMode: PickerDisplayMode.dropPane,
       container: this.elementId,
       onUploadDone: res => this.uploadSuccess.emit(res)
