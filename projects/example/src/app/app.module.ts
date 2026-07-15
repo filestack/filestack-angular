@@ -23,7 +23,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     HighlightModule,
     BrowserAnimationsModule,
     FilestackModule.forRoot({
-      apikey: 'APEkwxKMZTsWNIP0XQsv2z'
+      apikey: 'YOUR_API_KEY'
     }),
     MatButtonModule,
     MatMenuModule,

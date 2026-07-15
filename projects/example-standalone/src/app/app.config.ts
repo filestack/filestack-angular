@@ -12,6 +12,6 @@ import { provideFilestack } from '@filestack/angular';
  */
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideFilestack({ apikey: 'APEkwxKMZTsWNIP0XQsv2z' })
+    provideFilestack({ apikey: 'YOUR_API_KEY' })
   ]
 };
