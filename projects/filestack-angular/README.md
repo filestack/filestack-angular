@@ -35,7 +35,7 @@ which can be also used independently if needed
 
 ## Usage
 ### Installation
-Install it through NPM
+Install it through NPM (the `filestack-js` SDK is installed automatically as a dependency)
 ```bash
 npm install filestack-js
 npm install @filestack/angular

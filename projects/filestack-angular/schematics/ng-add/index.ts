@@ -16,13 +16,13 @@ import { getWorkspace } from '@schematics/angular/utility/workspace';
 
 import { Schema } from './schema';
 
-// Keep aligned with the filestack-js peer dependency range in package.json.
+// Keep aligned with the filestack-js dependency range in package.json.
 const FILESTACK_JS_VERSION = '^4.0.0';
 
 /**
  * `ng add @filestack/angular` schematic.
  *
- * - Installs `filestack-js` (the peer dependency).
+ * - Installs `filestack-js` (a runtime dependency of the library).
  * - Registers `provideFilestack({ apikey })` in the application's root providers.
  *   `addRootProvider` transparently supports both standalone apps (`app.config.ts`)
  *   and NgModule apps (`app.module.ts`), and `provideFilestack` is the non-deprecated
@@ -40,7 +40,7 @@ export function ngAdd(options: Schema): Rule {
       );
     }
 
-    // 1. Ensure filestack-js (peer dependency) is present in package.json.
+    // 1. Ensure filestack-js (runtime dependency) is present in package.json.
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
       name: 'filestack-js',
