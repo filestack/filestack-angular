@@ -19,6 +19,9 @@
       "dom"
     ],
     "paths": {
+      "@filestack/angular": [
+        "projects/filestack-angular/src/public-api"
+      ],
       "angular": [
         "dist/filestack-angular"
       ],

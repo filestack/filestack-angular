@@ -53,12 +53,14 @@ This repository a contains angular workspace with two projects:
 which can be also used independently if needed
 
 ## Compatibility
-`@filestack/angular` **v5** requires **Angular 19 or 20** (`@angular/core` / `@angular/common`
-`^19.0.0 || ^20.0.0`) and Node 20.19+/22.12+. For Angular 18 use `@filestack/angular` v3.x.
+`@filestack/angular` **v5** requires **Angular 19 or newer** (`@angular/core` / `@angular/common`
+`>=19.0.0`) and Node 20.19+/22.12+. For Angular 18 use `@filestack/angular` v3.x.
 
-It works with **both filestack-js v3 (`>=3.47.4`) and v4**. The v4 client methods
-(`download`, `prefetch`, `setSecurity`, `setCname`, and the extra `storeURL` params) are
-exposed by the service but require filestack-js v4 at runtime.
+**filestack-js v4** (`^4.0.0`) is installed automatically as a dependency. The v4 client
+methods (`download`, `prefetch`, `setSecurity`, `setCname`, and the extra `storeURL`
+params) are exposed by the service and work out of the box. The wrapper is still
+source-compatible with filestack-js v3 (`>=3.47.4`) if you deliberately override the
+installed version, but those v4-only methods will be unavailable at runtime on v3.
 
 ## Server-Side Rendering (SSR)
 The library is SSR-safe (Angular Universal). Because the Filestack picker and
@@ -106,10 +108,68 @@ No changes are needed on your side — it works the same with or without zone.js
 ### Installation
 Install it through NPM
 ```bash
-npm install filestack-js   # v3 (>=3.47.4) or v4
-npm install @filestack/angular
+npm install @filestack/angular   # filestack-js is installed automatically
 ```
-Include ```FilestackModule``` in ```app.module.ts```
+Or let the schematic install `filestack-js` and wire up the provider for you:
+```bash
+ng add @filestack/angular
+```
+
+### Setup (standalone — recommended)
+For standalone apps (`bootstrapApplication`), register the provider with
+`provideFilestack()` in your `ApplicationConfig`:
+```typescript
+// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { provideFilestack } from '@filestack/angular';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideFilestack({ apikey: 'YOUR_API_KEY' /*, options: ClientConfig */ })
+  ]
+};
+```
+```typescript
+// main.ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
+
+bootstrapApplication(AppComponent, appConfig);
+```
+The picker components and pipe are standalone — import them directly into any
+standalone component:
+```typescript
+// app.component.ts
+import { Component } from '@angular/core';
+import {
+  PickerOverlayComponent,
+  PickerInlineComponent,
+  PickerDropPaneComponent,
+} from '@filestack/angular';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [PickerOverlayComponent, PickerInlineComponent, PickerDropPaneComponent],
+  templateUrl: './app.component.html',
+})
+export class AppComponent {}
+```
+```html
+<!-- app.component.html — apikey is taken from provideFilestack(), no input needed -->
+<ng-picker-overlay
+  (uploadSuccess)="onUploadSuccess($event)"
+  (uploadError)="onUploadError($event)">
+  <button>Open picker</button>
+</ng-picker-overlay>
+```
+> A full working demo of all three pickers lives in `projects/example-standalone`.
+> Run it with `ng serve example-standalone`.
+
+### Setup (NgModule — deprecated)
+`FilestackModule.forRoot()` is kept for backward compatibility. Prefer
+`provideFilestack()` above for new apps.
 ```javascript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
