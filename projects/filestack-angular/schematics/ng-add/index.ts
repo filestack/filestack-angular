@@ -20,7 +20,7 @@ import { Schema } from './schema';
 // the peerDependencies range in package.json so `ng add` writes a matching
 // dependency into the consumer app; npm then resolves to the newest satisfying
 // version (currently the latest 4.x).
-const FILESTACK_JS_VERSION = '>=3.47.4 <5.0.0';
+const FILESTACK_JS_VERSION = '>3.0.0';
 
 /**
  * `ng add @filestack/angular` schematic.
