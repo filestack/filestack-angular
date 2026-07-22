@@ -16,8 +16,11 @@ import { getWorkspace } from '@schematics/angular/utility/workspace';
 
 import { Schema } from './schema';
 
-// Keep aligned with the filestack-js dependency range in package.json.
-const FILESTACK_JS_VERSION = '^4.0.0';
+// filestack-js is a peerDependency of @filestack/angular. Keep this in sync with
+// the peerDependencies range in package.json so `ng add` writes a matching
+// dependency into the consumer app; npm then resolves to the newest satisfying
+// version (currently the latest 4.x).
+const FILESTACK_JS_VERSION = '>=3.47.4 <5.0.0';
 
 /**
  * `ng add @filestack/angular` schematic.
