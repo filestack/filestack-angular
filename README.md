@@ -53,7 +53,7 @@ This repository a contains angular workspace with two projects:
 which can be also used independently if needed
 
 ## Compatibility
-`@filestack/angular` **v5** requires **Angular 19 or newer** (`@angular/core` / `@angular/common`
+`@filestack/angular` **4** requires **Angular 19 or newer** (`@angular/core` / `@angular/common`
 `>=19.0.0`) and Node 20.19+/22.12+. For Angular 18 use `@filestack/angular` v3.x.
 
 **filestack-js v4** (`^4.0.0`) is installed automatically as a dependency. The v4 client
