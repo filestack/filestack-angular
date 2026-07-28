@@ -46,7 +46,7 @@
     "@angular-eslint/eslint-plugin-template": "^20.7.0",
     "@angular-eslint/schematics": "^20.7.0",
     "@angular-eslint/template-parser": "^20.7.0",
-    "@angular/cli": "^20.3.27",
+    "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^20.3.25",
     "@angular/language-service": "^20.3.25",
     "@rollup/plugin-commonjs": "^28.0.0",
